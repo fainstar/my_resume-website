@@ -269,4 +269,3 @@ npm run build && npm run preview
 - 使用HTTPS進行部署
 - 定期更新依賴包
 
-v2.0
