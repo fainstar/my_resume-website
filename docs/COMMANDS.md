@@ -147,3 +147,71 @@ docker push <鏡像名>:<標籤>
 # 查看本地鏡像
 docker images
 ```
+
+### 鏡像更新與發布
+```bash
+# 登錄到Docker Hub
+docker login
+
+# 重新構建鏡像（包含最新代碼）
+docker build -t oomaybeoo/my-resume-website .
+
+# 為鏡像添加新標籤
+docker tag oomaybeoo/my-resume-website oomaybeoo/my-resume-website:latest
+
+# 推送更新後的鏡像到Docker Hub
+docker push oomaybeoo/my-resume-website:latest
+
+# 清理構建緩存（可選）
+docker builder prune
+```
+
+## Git 和 Docker 同步更新流程
+
+### 代碼更新與鏡像同步
+```bash
+# 1. 確保本地代碼是最新的
+git pull origin main
+
+# 2. 提交本地更改
+git add .
+git commit -m "更新說明"
+
+# 3. 推送到Git倉庫
+git push origin main
+
+# 4. 重新構建Docker鏡像
+docker build -t oomaybeoo/my-resume-website .
+
+# 5. 更新鏡像標籤
+docker tag oomaybeoo/my-resume-website oomaybeoo/my-resume-website:latest
+
+# 6. 推送到Docker Hub
+docker push oomaybeoo/my-resume-website:latest
+```
+
+### 最佳實踐建議
+```bash
+# 在開發新功能時
+1. 創建新的Git分支
+git checkout -b feature/new-feature
+
+# 開發完成後
+2. 合併到主分支
+git checkout main
+git merge feature/new-feature
+
+# 構建和推送Docker鏡像
+3. 構建新版本鏡像
+docker build -t oomaybeoo/my-resume-website:feature-1.0 .
+
+4. 推送特定版本
+docker push oomaybeoo/my-resume-website:feature-1.0
+
+5. 更新latest標籤
+docker tag oomaybeoo/my-resume-website:feature-1.0 oomaybeoo/my-resume-website:latest
+docker push oomaybeoo/my-resume-website:latest
+```
+
+
+20250401
