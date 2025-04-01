@@ -30,7 +30,7 @@ const About: React.FC<AboutProps> = ({ id }) => {
     tags: ['Nginx', 'Django', 'Swift', 'Flask', 'React', 'Docker', 'AWS', 'Machine Learning', 'Network Security'],
   };
 
-  const { Title, Paragraph } = Typography;
+  const { Title } = Typography;
 
   return (
     <Section id={id} title="關於我" backgroundColor="#ffffff">

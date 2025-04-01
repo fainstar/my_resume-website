@@ -1,9 +1,8 @@
 import React from 'react';
 import { Layout, Typography, Space, Divider } from 'antd';
-import { LinkedinOutlined, GithubOutlined, FacebookOutlined, InstagramOutlined } from '@ant-design/icons';
+import { GithubOutlined, InstagramOutlined } from '@ant-design/icons';
 
 const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
   
   return (
     <Layout.Footer style={{ padding: '24px 0', marginTop: 'auto', backgroundColor: '#f0f0f0' }}>

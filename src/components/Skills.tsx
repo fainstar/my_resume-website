@@ -34,7 +34,7 @@ const SKILL_ITEM_STYLE = {
 // 定義技能列表容器樣式
 const SKILLS_CONTAINER_STYLE = {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column' as const,
   gap: '16px'
 };
 
