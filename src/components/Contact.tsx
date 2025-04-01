@@ -1,6 +1,6 @@
-import React from 'react';
-import { Form, Input, Button, message, Row, Col, Card, Typography, Space } from 'antd';
-import { MailOutlined, PhoneOutlined, SendOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Form, Input, Button, Modal, Row, Col, Card, Typography, Space } from 'antd';
+import { MailOutlined, PhoneOutlined, SendOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import Section from './Section';
 
 interface ContactProps {
@@ -11,11 +11,61 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
   const [form] = Form.useForm();
   const { Text } = Typography;
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalConfig, setModalConfig] = useState<{
+    title: string;
+    content: string;
+    icon: React.ReactNode;
+    okText: string;
+  }>({ title: '', content: '', icon: null, okText: '' });
+
   // 處理表單提交
-  const onFinish = () => {
-    // 這裡可以添加表單提交邏輯
-    message.success('您的訊息已成功送出！我們會盡快回覆您。');
-    form.resetFields();
+  const onFinish = async (values: any) => {
+    const { name, email, subject, message: messageContent } = values;
+     
+    // 構建Google表單提交URL
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfgWype8_GbiDZDhciipjgta51srtsPkyBWVofQ6zrkZRYOKQ/formResponse';
+    const formData = new FormData();
+    formData.append('entry.1298446987', name);
+    formData.append('entry.2013687626', email);
+    formData.append('entry.965733187', subject);
+    formData.append('entry.1305536463', messageContent);
+
+    try {
+      // 顯示提交中的狀態
+      setModalConfig({
+        title: '傳送中',
+        content: '正在傳送您的訊息，請稍候...',
+        icon: <SendOutlined style={{ color: '#1890ff', fontSize: '24px' }} />,
+        okText: '請稍候'
+      });
+      setIsModalVisible(true);
+      
+      // 使用fetch提交表單
+      await fetch(formUrl, {
+        method: 'POST',
+        mode: 'no-cors', // 由於Google表單的跨域限制
+        body: formData
+      });
+
+      // 由於no-cors模式，我們無法獲取具體的響應狀態
+      // 但如果沒有拋出錯誤，就認為提交成功
+      setModalConfig({
+        title: '傳送成功',
+        content: '您的訊息已成功傳送！我們會盡快回覆您。',
+        icon: <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '24px' }} />,
+        okText: '確定'
+      });
+      form.resetFields();
+    } catch (error) {
+      console.error('提交表單時發生錯誤:', error);
+      setModalConfig({
+        title: '傳送失敗',
+        content: '很抱歉，傳送失敗。請稍後再試！',
+        icon: <CloseCircleOutlined style={{ color: '#ff4d4f', fontSize: '24px' }} />,
+        okText: '關閉'
+      });
+    }
   };
 
   // 聯絡資訊數據
@@ -32,8 +82,28 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
     }
   ];
 
+  const handleModalOk = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <Section id={id} title="聯絡我" backgroundColor="#f0f5ff">
+      <Modal
+        title={modalConfig.title}
+        open={isModalVisible}
+        onOk={handleModalOk}
+        onCancel={handleModalOk}
+        okText={modalConfig.okText}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        centered
+      >
+        <div style={{ textAlign: 'center', padding: '24px 0' }}>
+          {modalConfig.icon}
+          <Typography.Text style={{ display: 'block', marginTop: '16px' }}>
+            {modalConfig.content}
+          </Typography.Text>
+        </div>
+      </Modal>
       <Row gutter={[24, 24]}>
         {/* 聯絡資訊卡片 */}
         <Col xs={24} md={8}>
@@ -83,9 +153,9 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
                   <Form.Item
                     name="name"
                     label="姓名"
-                    rules={[{ required: true, message: '請輸入您的姓名' }]}
+                    rules={[{ required: true, message: '請輸入您的稱呼' }]}
                   >
-                    <Input size="large" placeholder="請輸入您的姓名" />
+                    <Input size="large" placeholder="請輸入您的稱呼" />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12}>

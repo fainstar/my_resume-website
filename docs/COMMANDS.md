@@ -201,6 +201,36 @@ git checkout -b feature/new-feature
 git checkout main
 git merge feature/new-feature
 
+# 刪除功能分支（可選）
+git branch -d feature/new-feature
+
+# 更新Docker鏡像並發布
+3. 確保代碼已經合併到main分支
+git checkout main
+git pull origin main
+
+4. 更新版本號（如果需要）
+# 修改package.json中的version
+
+5. 構建並測試
+npm install
+npm run build
+
+6. 提交版本更新
+git add .
+git commit -m "build: 更新版本到 x.x.x"
+git push origin main
+
+7. 構建並推送Docker鏡像
+docker build -t oomaybeoo/my-resume-website:latest .
+docker push oomaybeoo/my-resume-website:latest
+
+8. 在生產環境更新（如果需要）
+docker-compose pull
+docker-compose up -d
+git checkout main
+git merge feature/new-feature
+
 # 構建和推送Docker鏡像
 3. 構建新版本鏡像
 docker build -t oomaybeoo/my-resume-website:feature-1.0 .
@@ -215,3 +245,9 @@ docker push oomaybeoo/my-resume-website:latest
 
 
 20250401
+
+docker build -t oomaybeoo/my-resume-website:V1.2 .
+docker tag oomaybeoo/my-resume-website oomaybeoo/my-resume-website:V1.2
+docker push oomaybeoo/my-resume-website:V1.2
+
+
