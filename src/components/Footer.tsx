@@ -11,13 +11,13 @@ const Footer: React.FC = () => {
         <Divider />
         <Space style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography.Text type="secondary">
-            © 個人履歷網站. 保留所有權利.
+            ©自家伺服器.
           </Typography.Text>
           <Space>
     
             <a href="https://github.com/fainstar" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
               <GithubOutlined style={{ fontSize: '20px', margin: '0 8px' }} />
-\           </a>
+            </a>
             <a href="https://www.instagram.com/ru.0811" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
               <InstagramOutlined style={{ fontSize: '20px', margin: '0 8px' }} />
             </a>
