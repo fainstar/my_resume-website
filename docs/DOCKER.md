@@ -92,3 +92,14 @@ docker run -d -p 80:80 <your-dockerhub-username>/my-resume-website
 
 
 
+
+### 實用
+```bash
+docker build -t oomaybeoo/my-resume-website .
+
+docker push oomaybeoo/my-resume-website .
+
+docker pull oomaybeoo/my-resume-website .
+
+docker run -d -p 3200:3000 --name my-resume-website oomaybeoo/my-resume-website
+```
