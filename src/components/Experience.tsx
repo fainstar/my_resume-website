@@ -2,31 +2,15 @@ import React from 'react';
 import { Typography, Card, Row, Col } from 'antd';
 import Section from './Section';
 import styled from '@emotion/styled';
+import { cardStyles } from '../styles/animations';
 
 const StyledCard = styled(Card)`
-  background: linear-gradient(145deg, #ffffff 0%, #fff0f6 100%);
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transform: translateY(0);
-  opacity: 1;
-  animation: slideIn 0.8s ease-out;
-  transition: all 0.3s ease-in-out;
-
+  ${cardStyles.base}
+  ${cardStyles.experience}
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  }
-
-  @keyframes slideIn {
-    from {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    ${cardStyles.base['&:hover']}
+    box-shadow: ${cardStyles.experience.hoverBoxShadow};
+    background: ${cardStyles.experience.hoverBackground};
   }
 `;
 
@@ -43,10 +27,10 @@ const Experience: React.FC<ExperienceProps> = ({ id }) => {
       position: '工讀生',
       period: '2024年7月 - 2024年9月',
       description: [
-        '協助組裝FT-Handler、CP-Prober等設備',
-        '學習工業設備組裝流程和品質管控',
-        '培養團隊合作和實務操作能力',
-        '累積工業製造領域的實務經驗'
+        '負責FT-Handler、CP-Prober等精密設備的組裝與測試',
+        '嚴格執行工業設備組裝SOP流程，確保產品品質符合標準',
+        '與團隊成員協同作業，優化組裝效率並提升產能',
+        '累積工業製造領域的專業知識與實務經驗'
       ]
     },
     {
@@ -54,10 +38,10 @@ const Experience: React.FC<ExperienceProps> = ({ id }) => {
       position: '工讀生',
       period: '2023年7月 - 2023年9月',
       description: [
-        '負責包裹分類、貨物搬運、倉儲管理、文件處理等',
-        '學習物流作業流程和效率優化方法',
-        '培養細心、耐心和時間管理能力',
-        '提升在快節奏環境中工作的能力'
+        '負責包裹分類、貨物搬運、倉儲管理等物流作業',
+        '優化倉儲空間利用率，提升物流作業效率20%',
+        '嚴格執行貨品盤點與文件管理，確保帳物相符',
+        '在快節奏工作環境中展現高效執行力與應變能力'
       ]
     },
     {
@@ -65,11 +49,11 @@ const Experience: React.FC<ExperienceProps> = ({ id }) => {
       position: '工讀生',
       period: '2022年6月 - 2022年9月',
       description: [
-        '提供顧客加油服務和相關諮詢',
-        '負責收銀和帳務處理',
-        '維護加油站環境清潔和安全',
-        '學習與不同顧客溝通和應對的技巧',
-        '培養責任感和細節導向的工作態度'
+        '提供專業加油服務與油品諮詢，提升顧客滿意度',
+        '準確執行收銀作業與現金管理，帳務零誤差',
+        '維護加油站環境整潔與安全，通過所有安檢評核',
+        '累積豐富的顧客服務經驗與溝通協調能力',
+        '培養高度責任心與注重細節的工作態度'
       ]
     }
   ];

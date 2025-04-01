@@ -32,7 +32,18 @@ const Education: React.FC<EducationProps> = ({ id }) => {
                 background: 'linear-gradient(145deg, #ffffff 0%, #e6fffb 100%)',
                 border: 'none',
                 borderRadius: '16px',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)'
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+                transition: 'all 0.3s ease-in-out',
+                transform: 'translateY(0)'
+              }}
+              hoverable
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-8px)';
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.08)';
               }}
             >
               <div style={{
@@ -40,7 +51,22 @@ const Education: React.FC<EducationProps> = ({ id }) => {
                 alignItems: 'center',
                 marginBottom: '16px'
               }}>
-                <BookOutlined style={{ fontSize: '24px', color: '#13c2c2', marginRight: '12px' }} />
+                <BookOutlined 
+                  style={{ 
+                    fontSize: '24px', 
+                    color: '#13c2c2', 
+                    marginRight: '12px',
+                    transition: 'all 0.3s ease-in-out'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.2)';
+                    e.currentTarget.style.filter = 'drop-shadow(0 0 8px rgba(19, 194, 194, 0.5))';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.filter = 'none';
+                  }}
+                />
                 <div>
                   <Title level={4} style={{ margin: 0, color: '#1a1a1a' }}>{edu.school}</Title>
                   <Text type="secondary">{edu.period}</Text>

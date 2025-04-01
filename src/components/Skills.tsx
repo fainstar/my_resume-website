@@ -1,7 +1,52 @@
 import React from 'react';
 import { Card, Tag, Typography, Row, Col } from 'antd';
 import Section from './Section';
-import '../styles/animations.css';
+import styled from '@emotion/styled';
+import { cardStyles } from '../styles/animations';
+
+// 定義樣式常量
+const CARD_HEAD_STYLE = {
+  fontSize: '1.5rem',
+  color: '#f58220',
+  marginBottom: '16px',
+  fontWeight: 600
+};
+
+// 定義標籤樣式常量
+const TAG_STYLE = {
+  fontSize: '0.9rem',
+  padding: '4px 12px',
+  borderRadius: '12px',
+  backgroundColor: '#fff7e6',
+  color: '#f58220',
+  border: '1px solid #f58220',
+  fontWeight: 500
+};
+
+// 定義技能項樣式常量
+const SKILL_ITEM_STYLE = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '8px 0'
+};
+
+// 定義技能列表容器樣式
+const SKILLS_CONTAINER_STYLE = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px'
+};
+
+const StyledCard = styled(Card)`
+  ${cardStyles.base}
+  ${cardStyles.skills}
+  &:hover {
+    ${cardStyles.base['&:hover']}
+    box-shadow: ${cardStyles.skills.hoverBoxShadow};
+    background: ${cardStyles.skills.hoverBackground};
+  }
+`;
 
 interface SkillProps {
   id: string;
@@ -63,44 +108,26 @@ const Skills: React.FC<SkillProps> = ({ id }) => {
   };
 
   return (
-    <Section id={id} title="專業技能" backgroundColor="#f7f0ff">
+    <Section id={id} title="專業技能" backgroundColor="#fff7e6">
       <Row gutter={[24, 24]}>
         {skillCategories.map((category, index) => (
           <Col xs={24} md={8} key={index}>
-            <Card
+            <StyledCard
               title={category.title}
-              headStyle={{
-                fontSize: '1.5rem',
-                background: 'linear-gradient(45deg, #722ed1 30%, #eb2f96 90%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}
+              headStyle={CARD_HEAD_STYLE}
               className="skill-card"
-              style={{
-                height: '100%',
-                background: 'linear-gradient(145deg, #ffffff 0%, #f7f0ff 100%)'
-              }}
             >
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={SKILLS_CONTAINER_STYLE}>
                 {category.skills.map((skill) => (
-                  <div key={skill.name} style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '8px 0'
-                  }}>
+                  <div key={skill.name} style={SKILL_ITEM_STYLE}>
                     <Text strong style={{ fontSize: '1.1rem' }}>{skill.name}</Text>
-                    <Tag style={{
-                      fontSize: '0.9rem',
-                      padding: '4px 12px',
-                      borderRadius: '12px'
-                    }}>
+                    <Tag style={TAG_STYLE}>
                       {getStarRating(skill.level)}
                     </Tag>
                   </div>
                 ))}
               </div>
-            </Card>
+            </StyledCard>
           </Col>
         ))}
       </Row>

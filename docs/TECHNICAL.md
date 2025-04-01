@@ -1,6 +1,30 @@
 # 技術文檔
 
+## 項目架構
+```
+my-resume-website/
+├── src/
+│   ├── components/     # 可重用組件
+│   │   ├── Header.tsx  # 頂部導航
+│   │   ├── Section.tsx # 區塊容器
+│   │   └── ...
+│   ├── theme.ts        # 主題配置
+│   └── App.tsx         # 組件聚合入口
+├── public/             # 靜態資源
+└── docs/               # 技術文檔
+```
+
 ## 組件文檔
+
+### 組件交互關係
+```mermaid
+flowchart LR
+    App --> Header
+    App --> Section
+    Section --> About
+    Section --> Experience
+    Section --> Projects
+```
 
 ### Header 組件
 
@@ -58,11 +82,41 @@ interface AboutProps {
 
 ## 主題配置
 
+### 樣式系統架構
+```mermaid
+flowchart TD
+    Theme --> Colors
+    Theme --> Spacing
+    Theme --> Breakpoints
+    Theme --> Animations
+```
+
 主題配置位於 `src/theme.ts`，包含：
-- 顏色系統
-- 排版設置
-- 響應式斷點
-- 動畫配置
+```typescript
+export default {
+  colors: {
+    primary: '#1890ff',
+    secondary: '#722ed1',
+    success: '#52c41a'
+  },
+  spacing: {
+    unit: 8,
+    sectionPadding: '80px 24px'
+  },
+  breakpoints: {
+    xs: '480px',
+    sm: '576px',
+    md: '768px'
+  },
+  animations: {
+    fadeIn: 'fadeIn 0.5s ease forwards'
+  }
+};
+```
+- 顏色系統：定義品牌主色與功能色
+- 排版設置：包含字級與間距規範
+- 響應式斷點：移動優先的斷點設置
+- 動畫配置：全局動畫參數
 
 ## 狀態管理
 
@@ -140,20 +194,37 @@ describe('Component Test', () => {
 
 ## 部署流程
 
-1. 執行測試
-   ```bash
-   npm run test
-   ```
+### 完整部署流程圖
+```mermaid
+flowchart TD
+    A[代碼提交] --> B[CI/CD觸發]
+    B --> C[執行測試]
+    C --> D{測試通過?}
+    D -->|是| E[構建生產版本]
+    D -->|否| F[通知開發者]
+    E --> G[生成Docker映像]
+    G --> H[推送至Registry]
+    H --> I[部署至伺服器]
+    I --> J[健康檢查]
+    J --> K{健康狀態?}
+    K -->|正常| L[流量切換]
+    K -->|異常| M[回滾版本]
+```
 
-2. 構建專案
-   ```bash
-   npm run build
-   ```
+### Docker部署
+```bash
+# 開發模式
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 
-3. 預覽構建結果
-   ```bash
-   npm run preview
-   ```
+# 生產模式
+docker build -t my-resume .
+docker run -p 80:80 my-resume
+```
+
+### 靜態部署
+```bash
+npm run build && npm run preview
+```
 
 ## 故障排除
 

@@ -65,7 +65,7 @@ const Section: React.FC<SectionProps> = ({ id, title, children, backgroundColor 
             : id === 'achievement' ? 'linear-gradient(45deg, #389e0d 30%, #237804 90%)'
             : id === 'hero' ? 'linear-gradient(45deg, #2b4acb 30%, #0d47a1 90%)'
             : id === 'about' ? 'linear-gradient(45deg, #531dab 30%, #391085 90%)'
-            : id === 'skills' ? 'linear-gradient(45deg, #d46b08 30%, #ad4e00 90%)'
+            : id === 'skills' ? 'linear-gradient(45deg, #ff7a45 30%, #ff9a45 90%)'
             : id === 'education' ? 'linear-gradient(45deg, #096dd9 30%, #003a8c 90%)'
             : id === 'contact' ? 'linear-gradient(45deg, #08979c 30%, #006d75 90%)'
             : 'linear-gradient(45deg, #2b4acb 30%, #0d47a1 90%)',

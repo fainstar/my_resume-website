@@ -51,6 +51,27 @@ npm run preview
 
 ```
 my-resume-website/
+├── src/
+│   ├── components/     # 可重用React組件
+│   │   ├── Header.tsx  # 頂部導航(狀態管理/滾動交互)
+│   │   ├── Section.tsx # 區塊容器(主題整合/動畫控制)
+│   │   └── ...
+│   ├── theme.ts        # 主題配置樞紐
+│   ├── App.tsx         # 組件聚合與路由控制
+│   └── styles/         # 全局樣式定義
+├── public/             # 靜態資源管理
+├── docs/               # 技術文檔系統
+└── vite.config.ts      # 構建配置核心
+```
+
+主要交互關係：
+- App.tsx 聚合所有頁面組件
+- Header 與 Section 通過props傳遞滾動定位
+- 組件通過theme.ts獲取樣式參數
+- 全局樣式通過Emotion注入
+
+```
+my-resume-website/
 ├── public/              # 靜態資源
 ├── src/
 │   ├── assets/         # 項目資源文件

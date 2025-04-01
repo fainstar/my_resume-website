@@ -4,45 +4,23 @@ import { TrophyOutlined } from '@ant-design/icons';
 import Section from './Section';
 import styled from '@emotion/styled';
 
+import { cardStyles, trophyShine } from '../styles/animations';
+
 const StyledCard = styled(Card)`
-  background: linear-gradient(145deg, #ffffff 0%, #f6ffed 100%);
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transform: translateY(0);
-  opacity: 1;
-  animation: slideIn 0.8s ease-out;
-  transition: all 0.3s ease-in-out;
-  height: 100%;
+  ${cardStyles.base}
+  ${cardStyles.achievement}
 
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 28px rgba(82, 196, 26, 0.15);
-    background: linear-gradient(145deg, #ffffff 0%, #e6ffe6 100%);
+    ${cardStyles.base['&:hover']}
+    box-shadow: ${cardStyles.achievement.hoverBoxShadow};
+    background: ${cardStyles.achievement.hoverBackground};
   }
 
   .trophy-icon {
     color: #52c41a;
     font-size: 24px;
     margin-bottom: 16px;
-    animation: trophyShine 2s infinite;
-  }
-
-  @keyframes slideIn {
-    from {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes trophyShine {
-    0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
-    50% { transform: scale(1.2) rotate(10deg); filter: brightness(1.3); }
-    100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+    animation: ${trophyShine} 2s infinite;
   }
 `;
 
