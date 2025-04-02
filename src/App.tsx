@@ -9,8 +9,13 @@ import Education from './components/Education';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Achievement from './components/Achievement';
+import Blog from './components/Blog';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
-function App() {
+// 主頁面組件
+const HomePage = () => {
+  const navigate = useNavigate();
+  
   // 定義網站各區塊
   const sections = [
     { id: 'about', title: '關於我' },
@@ -19,10 +24,16 @@ function App() {
     { id: 'education', title: '教育背景' },
     { id: 'achievement', title: '競賽成就' },
     { id: 'contact', title: '聯絡我' },
+    { id: 'blog', title: '網誌' },
   ];
 
-  // 處理區塊點擊事件，滾動到對應區塊
+  // 處理區塊點擊事件，滾動到對應區塊或導航到其他頁面
   const handleSectionClick = (id: string) => {
+    if (id === 'blog') {
+      navigate('/blog');
+      return;
+    }
+    
     const element = document.getElementById(id);
     if (element) {
       const headerOffset = 64; // 頂部導航欄高度
@@ -59,6 +70,36 @@ function App() {
         <Footer />
       </Layout>
     </ConfigProvider>
+  );
+}
+
+// 博客頁面組件包裝器
+const BlogPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const handleBack = () => {
+    if (location.pathname.includes('/blog/post/')) {
+      navigate('/blog');
+    } else {
+      navigate('/');
+    }
+  };
+  
+  return <Blog onBack={handleBack} />;
+}
+
+// 主應用組件
+function App() {
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/post/:id" element={<BlogPage />} />
+      </Routes>
+    </Router>
   );
 }
 

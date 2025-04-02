@@ -10,7 +10,8 @@ const sectionIcons: { [key: string]: React.ReactNode } = {
   education: <BookOutlined />,
   experience: <ExperimentOutlined />,
   achievement: <TrophyOutlined />,
-  contact: <ContactsOutlined />
+  contact: <ContactsOutlined />,
+  blog: <BookOutlined />
 };
 import { useMediaQuery } from 'react-responsive';
 
