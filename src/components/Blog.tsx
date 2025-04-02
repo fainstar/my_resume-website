@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Typography, Card, Row, Col, Button, Modal, Form, Input, DatePicker, Space, Tabs, message } from 'antd';
 import { ArrowLeftOutlined, EditOutlined, DeleteOutlined, PlusOutlined, SaveOutlined, EyeOutlined, LockOutlined } from '@ant-design/icons';
 import '../styles/animations.css';
@@ -8,6 +8,54 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../styles/blog.css';
 import { useParams, useNavigate } from 'react-router-dom';
+
+// 通用按鈕樣式函數
+const getButtonStyle = (type: 'default' | 'primary' | 'link' = 'default', isActive: boolean = false) => {
+  const baseStyle = {
+    fontSize: '16px',
+    padding: '8px 24px',
+    transition: 'all 0.3s',
+    borderRadius: '8px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+  };
+
+  if (type === 'primary' || isActive) {
+    return {
+      ...baseStyle,
+      background: 'linear-gradient(145deg, #4a6bff 0%, #2b4bdf 100%)',
+      border: 'none',
+      boxShadow: '0 4px 12px rgba(74, 107, 255, 0.25)',
+      color: '#fff'
+    };
+  }
+
+  return {
+    ...baseStyle,
+    background: '#fff',
+    border: '1px solid #d9d9d9',
+    boxShadow: 'none',
+    color: 'rgba(0, 0, 0, 0.88)'
+  };
+};
+
+// 按鈕懸停效果
+const getHoverEffects = (element: HTMLElement, isActive: boolean = false) => {
+  if (isActive) return;
+  
+  element.style.background = '#f0f2ff';
+  element.style.borderColor = '#4a6bff';
+  element.style.color = '#4a6bff';
+};
+
+const getLeaveEffects = (element: HTMLElement, isActive: boolean = false) => {
+  if (isActive) return;
+  
+  element.style.background = '#fff';
+  element.style.borderColor = '#d9d9d9';
+  element.style.color = 'rgba(0, 0, 0, 0.88)';
+};
 
 
 
@@ -20,6 +68,7 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
   const navigate = useNavigate();
   const { Title, Paragraph, Text } = Typography;
   const { TextArea } = Input;
+  const quillRef = useRef<ReactQuill>(null);
 
   // Quill編輯器的工具欄配置
   const modules = {
@@ -75,8 +124,6 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
   const [editMode, setEditMode] = useState(false);
   const [currentPost, setCurrentPost] = useState<BlogPost | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
-  const [isReadingMode, setIsReadingMode] = useState(false);
-  const [readingPost, setReadingPost] = useState<BlogPost | null>(null);
   
   // 密碼保護相關狀態
   const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
@@ -136,11 +183,10 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
         title: values.title,
         date: values.date.format('YYYY-MM-DD'),
         summary: values.summary,
-        content: values.content.toString()
+        content: quillRef.current?.getEditor().root.innerHTML || ''
       };
 
       if (currentPost) {
-        // 更新現有文章
         await dbManager.updatePost({
           ...postData,
           id: currentPost.id
@@ -148,7 +194,6 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
         setBlogPosts(blogPosts.map(post => post.id === currentPost.id ? { ...postData, id: currentPost.id } : post));
         message.success('文章已更新');
       } else {
-        // 添加新文章
         const newPostId = await dbManager.addPost(postData);
         setBlogPosts([{ ...postData, id: newPostId }, ...blogPosts]);
         message.success('文章已發布');
@@ -196,6 +241,10 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
   const handlePreview = () => {
     form.validateFields().then(() => {
       setPreviewMode(!previewMode);
+    }).catch(error => {
+      // 如果表單驗證失敗，顯示錯誤信息
+      console.error('表單驗證失敗:', error);
+      message.error('請先完成必填欄位');
     });
   };
 
@@ -207,11 +256,14 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <Button 
-            type="text" 
-            icon={<ArrowLeftOutlined />} 
+          <Button
+            type="default"
+            icon={<ArrowLeftOutlined />}
             onClick={onBack}
-            style={{ fontSize: '16px' }}
+            style={getButtonStyle('default')}
+            className="nav-button"
+            onMouseEnter={(e) => getHoverEffects(e.currentTarget)}
+            onMouseLeave={(e) => getLeaveEffects(e.currentTarget)}
           >
             返回首頁
           </Button>
@@ -221,6 +273,10 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
               type={editMode ? "primary" : "default"} 
               onClick={toggleEditMode}
               icon={<EditOutlined />}
+              style={getButtonStyle(editMode ? 'primary' : 'default')}
+              className="nav-button"
+              onMouseEnter={(e) => !editMode && getHoverEffects(e.currentTarget)}
+              onMouseLeave={(e) => !editMode && getLeaveEffects(e.currentTarget)}
             >
               {editMode ? '退出編輯' : '進入編輯'}
             </Button>
@@ -230,6 +286,8 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
                 type="primary" 
                 icon={<PlusOutlined />} 
                 onClick={handleAddPost}
+                style={getButtonStyle('primary')}
+                className="nav-button"
               >
                 新增文章
               </Button>
@@ -254,16 +312,30 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
         <Row gutter={[24, 24]}>
           {blogPosts.map(post => (
             <Col xs={24} md={12} lg={8} key={post.id}>
-              <div className="blog-card">
-                <img
-                  alt={post.title}
-                  src={post.coverImage || '/avatar-placeholder.jpg'}
-                  className="blog-card-cover"
-                />
-                <div className="blog-card-content" onClick={() => {
-                  navigate(`/blog/post/${post.id}`);
-                }}>
-                  <div className="blog-card-title">{post.title}</div>
+              <div className="blog-card" onClick={() => navigate(`/blog/post/${post.id}`)} style={{ 
+                cursor: 'pointer',
+                background: '#fff',
+                borderRadius: '8px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                transition: 'all 0.3s',
+                overflow: 'hidden'
+              }}>
+                <div className="blog-card-image-container">
+                  <img
+                    alt={post.title}
+                    src={post.coverImage || '/avatar-placeholder.jpg'}
+                    className="blog-card-cover"
+                  />
+                </div>
+                <div className="blog-card-content" style={{ padding: '24px' }}>
+                  <div className="blog-card-title" style={{ 
+                    fontSize: '1.5rem',
+                    fontWeight: 600,
+                    marginBottom: '8px',
+                    background: 'linear-gradient(45deg, #1890ff 30%, #096dd9 90%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}>{post.title}</div>
                   <div className="blog-card-date">{dayjs(post.date).format('YYYY年MM月DD日')}</div>
                   <div className="blog-card-summary">{post.summary}</div>
                 </div>
@@ -291,6 +363,10 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
           onCancel={() => setIsModalVisible(false)}
           footer={null}
           width={800}
+          style={{
+            borderRadius: '8px',
+            overflow: 'hidden'
+          }}
           destroyOnClose
         >
           <Tabs
@@ -336,6 +412,7 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
                       rules={[{ required: true, message: '請輸入文章內容' }]}
                     >
                       <ReactQuill
+                        ref={quillRef}
                         theme="snow"
                         modules={modules}
                         formats={formats}
@@ -345,13 +422,29 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
                     
                     <Form.Item>
                       <Space>
-                        <Button type="primary" icon={<SaveOutlined />} onClick={handleSubmit}>
+                        <Button 
+                          type="primary" 
+                          icon={<SaveOutlined />} 
+                          htmlType="submit"
+                          style={getButtonStyle('primary')}
+                        >
                           保存
                         </Button>
-                        <Button icon={<EyeOutlined />} onClick={handlePreview}>
+                        <Button 
+                          icon={<EyeOutlined />} 
+                          onClick={handlePreview}
+                          style={getButtonStyle('default')}
+                          onMouseEnter={(e) => getHoverEffects(e.currentTarget)}
+                          onMouseLeave={(e) => getLeaveEffects(e.currentTarget)}
+                        >
                           預覽
                         </Button>
-                        <Button onClick={() => setIsModalVisible(false)}>
+                        <Button 
+                          onClick={() => setIsModalVisible(false)}
+                          style={getButtonStyle('default')}
+                          onMouseEnter={(e) => getHoverEffects(e.currentTarget)}
+                          onMouseLeave={(e) => getLeaveEffects(e.currentTarget)}
+                        >
                           取消
                         </Button>
                       </Space>
@@ -371,13 +464,13 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
                       <Paragraph>{form.getFieldValue('summary')}</Paragraph>
                     </div>
                     <div style={{ marginTop: '20px' }}>
-                      <Paragraph>
-                        {form.getFieldValue('content')?.split('\n').map((paragraph: string, index: number) => (
-                          <p key={index}>{paragraph}</p>
-                        ))}
-                      </Paragraph>
+                      <div className="blog-content" dangerouslySetInnerHTML={{ __html: quillRef.current?.getEditor().root.innerHTML || '' }} />
                     </div>
-                    <Button type="primary" onClick={() => setPreviewMode(false)} style={{ marginTop: '20px' }}>
+                    <Button 
+                      type="primary" 
+                      onClick={() => setPreviewMode(false)} 
+                      style={{ ...getButtonStyle('primary'), marginTop: '20px' }}
+                    >
                       返回編輯
                     </Button>
                   </div>
@@ -414,10 +507,19 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
           </Form.Item>
           <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
             <Space>
-              <Button onClick={() => setIsPasswordModalVisible(false)}>
+              <Button 
+                onClick={() => setIsPasswordModalVisible(false)}
+                style={getButtonStyle('default')}
+                onMouseEnter={(e) => getHoverEffects(e.currentTarget)}
+                onMouseLeave={(e) => getLeaveEffects(e.currentTarget)}
+              >
                 取消
               </Button>
-              <Button type="primary" htmlType="submit">
+              <Button 
+                type="primary" 
+                htmlType="submit"
+                style={getButtonStyle('primary')}
+              >
                 確認
               </Button>
             </Space>
@@ -425,27 +527,7 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
         </Form>
       </Modal>
 
-      {/* 閱讀文章的模態框 */}
-      <Modal
-        title={readingPost?.title}
-        open={isReadingMode}
-        onCancel={() => setIsReadingMode(false)}
-        footer={null}
-        width={800}
-        centered
-      >
-        <div style={{ padding: '20px' }}>
-          <Typography.Text type="secondary" style={{ display: 'block', marginBottom: '16px' }}>
-            {readingPost?.date}
-          </Typography.Text>
-          
 
-          
-          <div style={{ marginTop: '20px' }} className="blog-content">
-            <div dangerouslySetInnerHTML={{ __html: readingPost?.content || '' }} />
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };

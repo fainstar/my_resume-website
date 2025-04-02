@@ -93,13 +93,53 @@ docker run -d -p 80:80 <your-dockerhub-username>/my-resume-website
 
 
 
-### 實用
+## 實用指令
+
+### 本地開發與測試
 ```bash
+# 構建開發環境鏡像
+docker build -t my-resume-website:dev -f Dockerfile.dev .
+
+# 運行開發環境
+docker run -p 5173:5173 -v $(pwd):/app my-resume-website:dev
+```
+
+### 生產環境部署
+```bash
+# 構建生產環境鏡像
 docker build -t oomaybeoo/my-resume-website .
 
-docker push oomaybeoo/my-resume-website .
+# 推送到 Docker Hub
+docker push oomaybeoo/my-resume-website
 
-docker pull oomaybeoo/my-resume-website .
+# 從 Docker Hub 拉取並運行
+docker pull oomaybeoo/my-resume-website
+docker run -d -p 80:80 --name my-resume oomaybeoo/my-resume-website
+```
 
-docker run -d -p 3200:3000 --name my-resume-website oomaybeoo/my-resume-website
+### 容器管理
+```bash
+# 查看運行中的容器
+docker ps
+
+# 停止容器
+docker stop my-resume
+
+# 重啟容器
+docker restart my-resume
+
+# 查看容器日誌
+docker logs -f my-resume
+```
+
+### 清理資源
+```bash
+# 刪除未使用的鏡像
+docker image prune -a
+
+# 刪除未使用的容器
+docker container prune
+
+# 刪除所有未使用的資源
+docker system prune
 ```

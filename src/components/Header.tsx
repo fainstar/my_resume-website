@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Typography, Space, Drawer } from 'antd';
-import { MenuOutlined, UserOutlined, TrophyOutlined, BookOutlined, ExperimentOutlined, ContactsOutlined, HomeOutlined } from '@ant-design/icons';
+import { MenuOutlined, UserOutlined, TrophyOutlined, BookOutlined, ExperimentOutlined, ContactsOutlined, HomeOutlined, HistoryOutlined } from '@ant-design/icons';
 import '../styles/animations.css';
 
 const sectionIcons: { [key: string]: React.ReactNode } = {
@@ -8,7 +8,7 @@ const sectionIcons: { [key: string]: React.ReactNode } = {
   about: <UserOutlined />,
   skills: <ExperimentOutlined />,
   education: <BookOutlined />,
-  experience: <ExperimentOutlined />,
+  experience: <HistoryOutlined />,
   achievement: <TrophyOutlined />,
   contact: <ContactsOutlined />,
   blog: <BookOutlined />

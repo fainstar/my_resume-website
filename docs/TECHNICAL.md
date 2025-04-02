@@ -21,9 +21,14 @@ my-resume-website/
 flowchart LR
     App --> Header
     App --> Section
+    App --> Blog
+    App --> BlogPost
     Section --> About
     Section --> Experience
-    Section --> Projects
+    Section --> Skills
+    Section --> Education
+    Section --> Contact
+    Blog --> BlogPost
 ```
 
 ### Header 組件
@@ -79,6 +84,44 @@ interface AboutProps {
     tags: string[];
   }
   ```
+
+### Blog 組件
+
+```typescript
+interface BlogProps {
+  onBack: () => void;
+}
+```
+
+- **功能**: 博客文章列表和管理
+- **特點**:
+  - 支持文章的新增、編輯和刪除
+  - 密碼保護的編輯模式
+  - 富文本編輯器(ReactQuill)支持
+  - 文章預覽功能
+- **數據結構**:
+  ```typescript
+  interface BlogPost {
+    id: number;
+    title: string;
+    date: string;
+    summary: string;
+    content: string;
+    coverImage?: string;
+  }
+  ```
+
+### BlogPost 組件
+
+```typescript
+// 無需傳入props，使用React Router的useParams獲取文章ID
+```
+
+- **功能**: 單篇博客文章的詳細顯示
+- **特點**:
+  - 響應式設計
+  - 支持HTML內容渲染
+  - 優化的閱讀體驗
 
 ## 主題配置
 

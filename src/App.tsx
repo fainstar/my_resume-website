@@ -10,6 +10,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Achievement from './components/Achievement';
 import Blog from './components/Blog';
+import BlogPost from './components/BlogPost';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 // 主頁面組件
@@ -76,16 +77,7 @@ const HomePage = () => {
 // 博客頁面組件包裝器
 const BlogPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  
-  const handleBack = () => {
-    if (location.pathname.includes('/blog/post/')) {
-      navigate('/blog');
-    } else {
-      navigate('/');
-    }
-  };
-  
+  const handleBack = () => navigate('/');
   return <Blog onBack={handleBack} />;
 }
 
@@ -97,7 +89,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/post/:id" element={<BlogPage />} />
+        <Route path="/blog/post/:id" element={<BlogPost />} />
       </Routes>
     </Router>
   );

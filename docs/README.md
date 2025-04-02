@@ -4,11 +4,13 @@
 
 ## 技術棧
 
-- **前端框架**: React 19 + TypeScript
-- **UI 框架**: Ant Design + Material-UI
+- **前端框架**: React 18 + TypeScript
+- **UI 框架**: Ant Design 5 + Material-UI 5
 - **樣式解決方案**: Emotion (CSS-in-JS)
 - **構建工具**: Vite 6
 - **代碼規範**: ESLint
+- **編輯器**: React-Quill
+- **響應式設計**: React-Responsive
 
 ## 快速開始
 

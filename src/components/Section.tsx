@@ -1,14 +1,14 @@
 import React from 'react';
 import { Card } from 'antd';
 import '../styles/animations.css';
-import { UserOutlined, TrophyOutlined, BookOutlined, ExperimentOutlined, ContactsOutlined, HomeOutlined } from '@ant-design/icons';
+import { UserOutlined, TrophyOutlined, BookOutlined, ExperimentOutlined, ContactsOutlined, HomeOutlined, HistoryOutlined } from '@ant-design/icons';
 
 const sectionIcons: { [key: string]: React.ReactNode } = {
   hero: <HomeOutlined style={{ fontSize: '2rem', marginRight: '12px' }} />,
   about: <UserOutlined style={{ fontSize: '2rem', marginRight: '12px' }} />,
   skills: <ExperimentOutlined style={{ fontSize: '2rem', marginRight: '12px' }} />,
   education: <BookOutlined style={{ fontSize: '2rem', marginRight: '12px' }} />,
-  experience: <ExperimentOutlined style={{ fontSize: '2rem', marginRight: '12px' }} />,
+  experience: <HistoryOutlined style={{ fontSize: '2rem', marginRight: '12px' }} />,
   achievement: <TrophyOutlined style={{ fontSize: '2rem', marginRight: '12px' }} />,
   contact: <ContactsOutlined style={{ fontSize: '2rem', marginRight: '12px' }} />
 };
