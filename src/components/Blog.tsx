@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Typography, Card, Row, Col, Button, Modal, Form, Input, DatePicker, Space, Tabs, message } from 'antd';
+import { Typography, Row, Col, Button, Modal, Form, Input, DatePicker, Space, Tabs, message } from 'antd';
 import { ArrowLeftOutlined, EditOutlined, DeleteOutlined, PlusOutlined, SaveOutlined, EyeOutlined, LockOutlined } from '@ant-design/icons';
 import '../styles/animations.css';
 import dayjs from 'dayjs';
@@ -104,8 +104,9 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
         if (id) {
           const post = posts.find(p => p.id === parseInt(id));
           if (post) {
-            setReadingPost(post);
-            setIsReadingMode(true);
+            // 删除未定义的状态更新
+            // setReadingPost(post);
+            // setIsReadingMode(true);
           } else {
             message.error('找不到該文章');
             navigate('/blog');
@@ -124,15 +125,15 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
   const [editMode, setEditMode] = useState(false);
   const [currentPost, setCurrentPost] = useState<BlogPost | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
+
+  
   
   // 密碼保護相關狀態
   const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordForm] = Form.useForm();
   
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([
-
-  ]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
 
   // 處理新增文章
   const handleAddPost = () => {

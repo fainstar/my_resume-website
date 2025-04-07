@@ -11,7 +11,7 @@ import Footer from './components/Footer';
 import Achievement from './components/Achievement';
 import Blog from './components/Blog';
 import BlogPost from './components/BlogPost';
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 // 主頁面組件
 const HomePage = () => {

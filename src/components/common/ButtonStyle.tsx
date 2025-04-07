@@ -1,5 +1,3 @@
-import React from 'react';
-
 // 按鈕類型定義
 export type ButtonType = 'default' | 'primary' | 'link';
 
