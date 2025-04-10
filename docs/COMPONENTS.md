@@ -14,6 +14,9 @@
 8. [Achievement 組件](#achievement-組件)
 9. [Contact 組件](#contact-組件)
 10. [Footer 組件](#footer-組件)
+11. [ProfileInfo 組件](#profileinfo-組件)
+12. [Blog 組件](#blog-組件)
+13. [BlogPost 組件](#blogpost-組件)
 
 ## Section 組件
 
@@ -166,20 +169,112 @@ interface Achievement {
 
 ## Contact 組件
 
-`Contact.tsx` 提供聯繫方式和聯繫表單。
+`Contact.tsx` 提供聯繫表單和聯繫信息。
 
 ### 功能
 
-- 展示電子郵件、電話和社交媒體鏈接
-- 提供聯繫表單，訪客可直接發送消息
-- 包含地圖或地址信息
+- 提供聯繫表單，包括姓名、電子郵件、主題和消息
+- 展示聯繫信息，如電子郵件和電話號碼
+- 表單驗證和提交功能
+- 集成社交媒體鏈接，包括 GitHub 和 Instagram
+- 支持表單提交到 Google 表單
+- 提供表單提交狀態的反饋模態框
+
+### 屬性
+
+```typescript
+interface ContactProps {
+  id: string; // 區塊ID，用於導航
+}
+```
+
+### 使用示例
+
+```tsx
+<Contact id="contact" />
+```
 
 ## Footer 組件
 
-`Footer.tsx` 是網站的底部區域。
+`Footer.tsx` 是網站的底部區域，提供版權信息和其他鏈接。
 
 ### 功能
 
-- 展示版權信息和創建年份
-- 提供網站地圖或重要鏈接
-- 包含社交媒體圖標和鏈接
+- 顯示版權信息
+- 提供社交媒體鏈接
+- 提供網站地圖和其他重要鏈接
+
+## ProfileInfo 組件
+
+`ProfileInfo.tsx` 是一個用於展示個人基本資訊的組件，包括頭像、姓名、電子郵件和電話號碼。
+
+### 功能
+
+- 展示個人頭像，支持自定義大小和樣式
+- 顯示姓名、電子郵件和電話號碼等聯絡資訊
+- 提供統一的樣式和排版
+
+### 屬性
+
+```typescript
+interface ProfileInfoProps {
+  name: string;       // 姓名
+  avatar: string;     // 頭像圖片路徑
+  email?: string;     // 可選的電子郵件
+  phone?: string;     // 可選的電話號碼
+}
+```
+
+### 使用示例
+
+```tsx
+<ProfileInfo 
+  name="王小明" 
+  avatar="/path/to/avatar.jpg" 
+  email="example@mail.com" 
+  phone="0912345678" 
+/>
+```
+
+## Blog 組件
+
+`Blog.tsx` 是一個用於展示和管理部落格文章的組件，支持文章的創建、編輯、刪除和查看。
+
+### 功能
+
+- 展示部落格文章列表，包括標題、摘要和發布日期
+- 提供文章的創建、編輯和刪除功能
+- 集成 ReactQuill 富文本編輯器，支持格式化文本、插入圖片等
+- 支持文章的密碼保護功能
+- 提供文章分類和標籤功能
+
+### 屬性
+
+```typescript
+interface BlogProps {
+  onBack: () => void; // 返回上一頁的回調函數
+}
+```
+
+### 使用示例
+
+```tsx
+<Blog onBack={() => navigate('/')} />
+```
+
+## BlogPost 組件
+
+`BlogPost.tsx` 是用於展示單篇部落格文章的組件，支持文章內容的渲染和密碼保護功能。
+
+### 功能
+
+- 展示文章的標題、內容、發布日期和作者
+- 支持富文本內容的渲染
+- 提供返回部落格列表的功能
+- 支持密碼保護的文章訪問控制
+
+### 使用示例
+
+```tsx
+<BlogPost /> // 通常通過路由參數獲取文章ID
+```

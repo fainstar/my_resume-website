@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Modal, Row, Col, Card, Typography, Space } from 'antd';
-import { MailOutlined, PhoneOutlined, SendOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { MailOutlined, PhoneOutlined, SendOutlined, CheckCircleOutlined, CloseCircleOutlined, GithubOutlined, InstagramOutlined } from '@ant-design/icons';
 import Section from './Section';
 
 interface ContactProps {
@@ -8,7 +8,14 @@ interface ContactProps {
 }
 
 const Contact: React.FC<ContactProps> = ({ id }) => {
-  const [form] = Form.useForm();
+  interface FormValues {
+    name: string;
+    email: string;
+    message: string;
+    subject: string; 
+  }
+  
+  const [form] = Form.useForm<FormValues>();
   const { Text } = Typography;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -20,7 +27,7 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
   }>({ title: '', content: '', icon: null, okText: '' });
 
   // 處理表單提交
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: FormValues) => {
     const { name, email, subject, message: messageContent } = values;
      
     // 構建Google表單提交URL
@@ -73,12 +80,22 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
     {
       icon: <MailOutlined style={{ fontSize: '24px', color: '#1890ff' }} />,
       title: '電子郵件',
-      content: 'xomaybeox@gmail.com'
+      content: <a href="mailto:xomaybeox@gmail.com" style={{ color: '#1890ff', textDecoration: 'none', fontWeight: 500 }}>xomaybeox@gmail.com</a>
     },
     {
       icon: <PhoneOutlined style={{ fontSize: '24px', color: '#52c41a' }} />,
       title: '聯絡電話',
-      content: '0909262309'
+      content: <a href="tel:0909262309" style={{ color: '#52c41a', textDecoration: 'none', fontWeight: 500 }}>0909262309</a>
+    },
+    {
+      icon: <GithubOutlined style={{ fontSize: '24px', color: '#333' }} />,
+      title: 'GitHub',
+      content: <a href="https://github.com/fainstar" target="_blank" rel="noopener noreferrer" style={{ color: '#333', textDecoration: 'none', fontWeight: 500 }}>fainstar</a>
+    },
+    {
+      icon: <InstagramOutlined style={{ fontSize: '24px', color: '#e1306c' }} />,
+      title: 'Instagram',
+      content: <a href="https://instagram.com/ru.0811" target="_blank" rel="noopener noreferrer" style={{ color: '#e1306c', textDecoration: 'none', fontWeight: 500 }}>ru.0811</a>
     }
   ];
 

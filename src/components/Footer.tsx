@@ -1,6 +1,5 @@
 import React from 'react';
-import { Layout, Typography, Space, Divider } from 'antd';
-import { GithubOutlined, InstagramOutlined } from '@ant-design/icons';
+import { Layout, Typography, Divider, Space } from 'antd';
 
 const Footer: React.FC = () => {
   
@@ -12,15 +11,6 @@ const Footer: React.FC = () => {
           <Typography.Text type="secondary">
             ©自家伺服器.
           </Typography.Text>
-          <Space>
-    
-            <a href="https://github.com/fainstar" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
-              <GithubOutlined style={{ fontSize: '20px', margin: '0 8px' }} />
-            </a>
-            <a href="https://www.instagram.com/ru.0811" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-              <InstagramOutlined style={{ fontSize: '20px', margin: '0 8px' }} />
-            </a>
-          </Space>
         </Space>
       </div>
     </Layout.Footer>

@@ -72,6 +72,9 @@ const StyledButton = styled.button`
 - **主題統一設計**：透過 Emotion 主題系統集中管理顏色、字型與 spacing
 - **模組化檔案結構**：每個組件獨立目錄，維護方便
 - **擴充性高**：可快速新增區塊或樣式而不影響其他元件
+- **部落格功能**：整合 ReactQuill 富文本編輯器，支援文章的創建、編輯與刪除
+- **社交媒體整合**：在 Contact 與 Footer 組件中整合 GitHub、Instagram 等社交媒體連結
+- **表單整合**：支援將聯絡表單提交到 Google 表單，實現無後端的資料收集
 ```
 
 ---
