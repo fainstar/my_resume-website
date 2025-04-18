@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Typography, Row, Col, Button, Modal, Form, Input, DatePicker, Space, Tabs, message } from 'antd';
-import { ArrowLeftOutlined, EditOutlined, DeleteOutlined, PlusOutlined, SaveOutlined, EyeOutlined, LockOutlined } from '@ant-design/icons';
-import '../styles/animations.css';
+import React, { useState, useEffect } from 'react';
+import { Typography, Row, Col, Button, Modal, Form, Input, DatePicker, Space, Tabs, message, Upload, Radio } from 'antd';
+import { ArrowLeftOutlined, EditOutlined, DeleteOutlined, PlusOutlined, SaveOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { markdownManager } from '../utils/markdownManager';
+import type { MarkdownPost } from '../utils/markdownManager';
+import { marked } from 'marked';
+import LazyImage from './common/LazyImage';
 import dayjs from 'dayjs';
-import { dbManager, BlogPost } from '../utils/database';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import '../styles/blog.css';
-import { useParams, useNavigate } from 'react-router-dom';
+import '../styles/blog-templates.css';
+import type { RadioChangeEvent } from 'antd';
 
 // 通用按鈕樣式函數
 const getButtonStyle = (type: 'default' | 'primary' | 'link' = 'default', isActive: boolean = false) => {
@@ -57,83 +59,76 @@ const getLeaveEffects = (element: HTMLElement, isActive: boolean = false) => {
   element.style.color = 'rgba(0, 0, 0, 0.88)';
 };
 
-
-
 interface BlogProps {
   onBack: () => void;
 }
 
 const Blog: React.FC<BlogProps> = ({ onBack }) => {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const { Title, Paragraph, Text } = Typography;
+  const { Title, Text, Paragraph } = Typography;
   const { TextArea } = Input;
-  const quillRef = useRef<ReactQuill>(null);
 
-  // Quill編輯器的工具欄配置
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
-      ['link', 'image'],
-      ['clean']
-    ]
-  };
-
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'color', 'background',
-    'align',
-    'link', 'image'
-  ];
+  // 初始化表單實例
   const [form] = Form.useForm();
-
-  // 初始化資料庫連接並載入文章
-  useEffect(() => {
-    const initDatabase = async () => {
-      try {
-        await dbManager.connect();
-        const posts = await dbManager.getAllPosts();
-        setBlogPosts(posts);
-        
-        if (id) {
-          const post = posts.find(p => p.id === parseInt(id));
-          if (post) {
-            // 删除未定义的状态更新
-            // setReadingPost(post);
-            // setIsReadingMode(true);
-          } else {
-            message.error('找不到該文章');
-            navigate('/blog');
-          }
-        }
-      } catch (error) {
-        console.error('初始化資料庫失敗:', error);
-        message.error('載入文章失敗');
-      }
-    };
-    initDatabase();
-  }, [id, navigate]);
   
   // 狀態管理
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentPost, setCurrentPost] = useState<BlogPost | null>(null);
+  const [currentPost, setCurrentPost] = useState<MarkdownPost | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
-
-  
+  const [selectedTemplate, setSelectedTemplate] = useState<'standard' | 'photo' | 'tech'>('standard');
+  const [htmlContent, setHtmlContent] = useState<string>('');
   
   // 密碼保護相關狀態
   const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordForm] = Form.useForm();
-  
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [blogPosts, setBlogPosts] = useState<MarkdownPost[]>([]);
+
+  // 處理圖片載入錯誤
+  const handleImageError = (postId: string) => {
+    console.error(`Failed to load image for post: ${postId}`);
+    setBlogPosts(prevPosts => prevPosts.map(p => 
+      p.id === postId ? { ...p, coverImage: '/avatar-placeholder.jpg' } : p
+    ));
+  };
+
+  // 確保表單初始化正確
+  useEffect(() => {
+    // 當模態框打開時重置表單
+    if (isModalVisible) {
+      form.resetFields();
+      if (currentPost) {
+        form.setFieldsValue({
+          title: currentPost.title,
+          date: dayjs(currentPost.date),
+          summary: currentPost.summary,
+          content: currentPost.content,
+          template: currentPost.template || 'standard',
+          coverImage: currentPost.coverImage
+        });
+        
+        // 強制更新表單，確保圖片顯示
+        if (currentPost.coverImage) {
+          form.validateFields(['coverImage']);
+        }
+      }
+    }
+  }, [isModalVisible, currentPost]);
+
+  // 初始化資料庫連接並載入文章
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const posts = await markdownManager.getAllPosts();
+        setBlogPosts(posts);
+      } catch (error) {
+        console.error('載入文章失敗:', error);
+        message.error('載入文章失敗');
+      }
+    };
+    loadPosts();
+  }, []);
 
   // 處理新增文章
   const handleAddPost = () => {
@@ -144,63 +139,65 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
   };
 
   // 處理編輯文章
-  const handleEditPost = (post: BlogPost) => {
+  const handleEditPost = (post: MarkdownPost) => {
     setCurrentPost(post);
-    form.setFieldsValue({
-      title: post.title,
-      date: dayjs(post.date),
-      summary: post.summary,
-      content: post.content
-    });
     setIsModalVisible(true);
     setPreviewMode(false);
+    // 表單初始化會在useEffect中處理
   };
 
   // 處理刪除文章
-  const handleDeletePost = (postId: number) => {
-    Modal.confirm({
-      title: '確定要刪除這篇文章嗎？',
-      content: '刪除後將無法恢復',
-      okText: '確定',
-      cancelText: '取消',
-      onOk: async () => {
-        try {
-          await dbManager.deletePost(postId);
-          setBlogPosts(blogPosts.filter(post => post.id !== postId));
-          message.success('文章已刪除');
-        } catch (error) {
-          console.error('刪除文章失敗:', error);
-          message.error('刪除文章失敗');
-        }
-      }
-    });
+  const handleDeletePost = async (postId: string) => {
+    try {
+      await markdownManager.deletePost(postId);
+      message.success('文章已刪除');
+      setBlogPosts(blogPosts.filter(post => post.id !== postId));
+    } catch (error) {
+      console.error('刪除文章失敗:', error);
+      message.error('刪除文章失敗');
+    }
   };
 
   // 處理表單提交
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
+      // 確保coverImage是有效的數據
+      if (!values.coverImage) {
+        message.error('請上傳文章縮圖');
+        return;
+      }
+      
       const postData = {
         title: values.title,
         date: values.date.format('YYYY-MM-DD'),
+        content: values.content,
         summary: values.summary,
-        content: quillRef.current?.getEditor().root.innerHTML || ''
+        template: values.template,
+        coverImage: values.coverImage // 現在coverImage已經是Base64數據，可以直接使用
       };
 
       if (currentPost) {
-        await dbManager.updatePost({
-          ...postData,
-          id: currentPost.id
-        });
-        setBlogPosts(blogPosts.map(post => post.id === currentPost.id ? { ...postData, id: currentPost.id } : post));
+        // 更新文章
+        await markdownManager.updatePost(currentPost.id, postData);
+        const updatedPost = await markdownManager.getPostById(currentPost.id);
+        if (updatedPost) {
+          setBlogPosts(prev => prev.map(post => 
+            post.id === currentPost.id ? updatedPost : post
+          ));
+        }
         message.success('文章已更新');
       } else {
-        const newPostId = await dbManager.addPost(postData);
-        setBlogPosts([{ ...postData, id: newPostId }, ...blogPosts]);
+        // 新增文章
+        await markdownManager.createPost(postData);
+        const posts = await markdownManager.getAllPosts();
+        setBlogPosts(posts);
         message.success('文章已發布');
       }
 
       setIsModalVisible(false);
+      form.resetFields();
+      setCurrentPost(null);
     } catch (error) {
       console.error('保存文章失敗:', error);
       message.error('保存文章失敗');
@@ -241,12 +238,21 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
   // 預覽功能
   const handlePreview = () => {
     form.validateFields().then(() => {
+      const content = form.getFieldValue('content');
+      if (content) {
+        const html = marked(content).toString();
+        setHtmlContent(html);
+      }
       setPreviewMode(!previewMode);
     }).catch(error => {
-      // 如果表單驗證失敗，顯示錯誤信息
       console.error('表單驗證失敗:', error);
       message.error('請先完成必填欄位');
     });
+  };
+
+  // 處理模板變更
+  const handleTemplateChange = (e: RadioChangeEvent) => {
+    setSelectedTemplate(e.target.value);
   };
 
   return (
@@ -322,10 +328,13 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
                 overflow: 'hidden'
               }}>
                 <div className="blog-card-image-container">
-                  <img
+                  <LazyImage
                     alt={post.title}
                     src={post.coverImage || '/avatar-placeholder.jpg'}
                     className="blog-card-cover"
+                    style={{ width: '100%', height: '100%' }}
+                    placeholderSrc="/avatar-placeholder.jpg"
+                    onError={() => handleImageError(post.id)}
                   />
                 </div>
                 <div className="blog-card-content" style={{ padding: '24px' }}>
@@ -363,7 +372,7 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
           open={isModalVisible}
           onCancel={() => setIsModalVisible(false)}
           footer={null}
-          width={800}
+          width="90%"
           style={{
             borderRadius: '8px',
             overflow: 'hidden'
@@ -382,7 +391,116 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
                     layout="vertical"
                     style={{ maxWidth: '100%' }}
                     onFinish={handleSubmit}
+                    name="blogPostForm"
                   >
+                    <Form.Item
+                      name="template"
+                      label="選擇模板"
+                      initialValue="standard"
+                    >
+                      <Radio.Group onChange={handleTemplateChange} value={selectedTemplate}>
+                        <Space direction="vertical">
+                          <Radio value="standard">標準文章</Radio>
+                          <Radio value="photo">圖文並茂</Radio>
+                          <Radio value="tech">專業技術文章</Radio>
+                        </Space>
+                      </Radio.Group>
+                    </Form.Item>
+                    {/* 隱藏字段用於存儲圖片數據 */}
+                    <Form.Item
+                      name="coverImageData"
+                      hidden
+                    >
+                      <Input />
+                    </Form.Item>
+                    
+                    <Form.Item
+                      name="coverImage"
+                      label="文章縮圖"
+                      rules={[{ required: true, message: '請上傳文章縮圖' }]}
+                    >
+                      <Upload
+                        accept="image/*"
+                        listType="picture-card"
+                        maxCount={1}
+                        showUploadList={false}
+                        fileList={[]} // 使用fileList代替value
+                        beforeUpload={async (file) => {
+                          try {
+                            // 使用修改後的uploadImage方法獲取Base64圖片數據
+                            const imageData = await markdownManager.uploadImage(file);
+                            if (!imageData || typeof imageData !== 'string') {
+                              throw new Error('Invalid image data returned');
+                            }
+                            
+                            // 直接設置coverImage字段為Base64數據
+                            form.setFieldsValue({
+                              coverImage: imageData
+                            });
+                            
+                            // 強制更新表單，確保UI顯示更新
+                            form.validateFields(['coverImage']);
+                            
+                            message.success('圖片上傳成功');
+                            return false; // 阻止默認上傳行為
+                          } catch (error) {
+                            console.error('圖片上傳失敗:', error);
+                            message.error('圖片上傳失敗：' + (error instanceof Error ? error.message : '未知錯誤'));
+                            return false;
+                          }
+                        }}
+                        onRemove={() => {
+                          form.setFieldsValue({ coverImage: undefined });
+                          return true;
+                        }}
+                      >
+                        {form.getFieldValue('coverImage') ? (
+                          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                            <LazyImage
+                              src={form.getFieldValue('coverImage')}
+                              alt="文章縮圖"
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                              placeholderSrc="/avatar-placeholder.jpg"
+                              onError={() => {
+                                console.error('圖片預覽載入失敗');
+                                // 不显示错误消息，直接使用默认图片，避免用户体验不佳
+                                // 當圖片載入失敗時，自動使用預設圖片
+                                const defaultImage = '/avatar-placeholder.jpg';
+                                form.setFieldsValue({ coverImage: defaultImage });
+                                // 确保表单验证并更新UI
+                                setTimeout(() => {
+                                  form.validateFields(['coverImage']);
+                                }, 0);
+                              }}
+                            />
+                            <div 
+                              style={{ 
+                                position: 'absolute', 
+                                top: 0, 
+                                right: 0, 
+                                background: 'rgba(0,0,0,0.5)', 
+                                color: '#fff',
+                                padding: '2px 8px',
+                                cursor: 'pointer',
+                                borderRadius: '0 0 0 4px'
+                              }}
+                              onClick={() => {
+                                form.setFieldsValue({ coverImage: undefined });
+                                form.validateFields(['coverImage']);
+                              }}
+                            >
+                              移除
+                            </div>
+                          </div>
+                        ) : (
+                          <div>
+                            <UploadOutlined />
+                            <div style={{ marginTop: 8 }}>上傳圖片</div>
+                          </div>
+                        )}
+                      </Upload>
+                    </Form.Item>
+                    
                     <Form.Item
                       name="title"
                       label="標題"
@@ -412,12 +530,10 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
                       label="內容"
                       rules={[{ required: true, message: '請輸入文章內容' }]}
                     >
-                      <ReactQuill
-                        ref={quillRef}
-                        theme="snow"
-                        modules={modules}
-                        formats={formats}
-                        style={{ height: '300px', marginBottom: '50px' }}
+                      <TextArea
+                        placeholder="使用Markdown格式編寫文章內容"
+                        autoSize={{ minRows: 15, maxRows: 30 }}
+                        style={{ fontFamily: 'monospace' }}
                       />
                     </Form.Item>
                     
@@ -465,7 +581,8 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
                       <Paragraph>{form.getFieldValue('summary')}</Paragraph>
                     </div>
                     <div style={{ marginTop: '20px' }}>
-                      <div className="blog-content" dangerouslySetInnerHTML={{ __html: quillRef.current?.getEditor().root.innerHTML || '' }} />
+                      <div className={`blog-content blog-template-${selectedTemplate}`} 
+                        dangerouslySetInnerHTML={{ __html: htmlContent }} />
                     </div>
                     <Button 
                       type="primary" 
@@ -484,51 +601,27 @@ const Blog: React.FC<BlogProps> = ({ onBack }) => {
       
       {/* 密碼驗證模態框 */}
       <Modal
-        title="請輸入密碼"
+        title="請輸入管理員密碼"
         open={isPasswordModalVisible}
         onCancel={() => setIsPasswordModalVisible(false)}
-        footer={null}
-        destroyOnClose
-        centered
+        footer={[
+          <Button key="cancel" onClick={() => setIsPasswordModalVisible(false)}>
+            取消
+          </Button>,
+          <Button key="submit" type="primary" onClick={handlePasswordSubmit}>
+            確認
+          </Button>
+        ]}
       >
-        <Form
-          form={passwordForm}
-          layout="vertical"
-          onFinish={handlePasswordSubmit}
-        >
+        <Form form={passwordForm} layout="vertical" name="passwordForm">
           <Form.Item
             name="password"
             rules={[{ required: true, message: '請輸入密碼' }]}
           >
-            <Input.Password
-              prefix={<LockOutlined />}
-              placeholder="請輸入密碼"
-              size="large"
-            />
-          </Form.Item>
-          <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
-            <Space>
-              <Button 
-                onClick={() => setIsPasswordModalVisible(false)}
-                style={getButtonStyle('default')}
-                onMouseEnter={(e) => getHoverEffects(e.currentTarget)}
-                onMouseLeave={(e) => getLeaveEffects(e.currentTarget)}
-              >
-                取消
-              </Button>
-              <Button 
-                type="primary" 
-                htmlType="submit"
-                style={getButtonStyle('primary')}
-              >
-                確認
-              </Button>
-            </Space>
+            <Input.Password placeholder="請輸入管理員密碼" />
           </Form.Item>
         </Form>
       </Modal>
-
-
     </div>
   );
 };

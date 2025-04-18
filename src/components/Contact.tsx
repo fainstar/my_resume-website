@@ -169,7 +169,7 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
                 <Col xs={24} sm={12}>
                   <Form.Item
                     name="name"
-                    label="姓名"
+                    label="稱呼"
                     rules={[{ required: true, message: '請輸入您的稱呼' }]}
                   >
                     <Input size="large" placeholder="請輸入您的稱呼" />

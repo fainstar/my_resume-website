@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Typography, Button, Space, message } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useParams, useNavigate } from 'react-router-dom';
-import { dbManager, BlogPost as BlogPostType } from '../utils/database';
+import { markdownManager, MarkdownPost } from '../utils/markdownManager';
 import '../styles/blog.css';
+import '../styles/blog-templates.css';
 import dayjs from 'dayjs';
 
 // 通用按鈕樣式函數
@@ -58,15 +59,17 @@ const BlogPost: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { Title, Text } = Typography;
-  const [post, setPost] = useState<BlogPostType | null>(null);
+  const [post, setPost] = useState<MarkdownPost | null>(null);
 
   useEffect(() => {
     const loadPost = async () => {
       try {
-        await dbManager.connect();
-        const posts = await dbManager.getAllPosts();
-        const currentPost = posts.find(p => p.id === parseInt(id || ''));
-        
+        if (!id) {
+          message.error('文章ID不存在');
+          navigate('/blog');
+          return;
+        }
+        const currentPost = await markdownManager.getPostById(id);
         if (currentPost) {
           setPost(currentPost);
         } else {
@@ -104,6 +107,13 @@ const BlogPost: React.FC = () => {
 
           {post && (
             <div style={{ padding: '24px', background: '#fff', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+              {post.coverImage && (
+                <img
+                  src={post.coverImage}
+                  alt={post.title}
+                  style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: '8px', marginBottom: '16px' }}
+                />
+              )}
               <Title level={1} style={{
                 fontSize: '2.5rem',
                 marginBottom: '16px',
@@ -124,8 +134,8 @@ const BlogPost: React.FC = () => {
                 borderRadius: '8px',
                 marginBottom: '24px'
               }}>
-                <div className="blog-content" style={{ fontSize: '16px', lineHeight: '1.8' }}>
-                  <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                <div className={`blog-content blog-template-${post.template || 'standard'}`} style={{ fontSize: '16px', lineHeight: '1.8' }}>
+                  <div dangerouslySetInnerHTML={{ __html: post.html || '' }} />
                 </div>
               </div>
             </div>

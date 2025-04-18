@@ -114,7 +114,7 @@ docker push oomaybeoo/my-resume-website
 
 # 從 Docker Hub 拉取並運行
 docker pull oomaybeoo/my-resume-website
-docker run -d -p 80:80 --name my-resume oomaybeoo/my-resume-website
+docker run -d -p 3200:3000 --name my-resume oomaybeoo/my-resume-website
 ```
 
 ### 容器管理

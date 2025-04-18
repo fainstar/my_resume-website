@@ -5,11 +5,14 @@ import styled from '@emotion/styled';
 import { cardStyles } from '../styles/animations';
 
 // 定義樣式常量
-const CARD_HEAD_STYLE = {
-  fontSize: '1.5rem',
-  color: '#f58220',
-  marginBottom: '16px',
-  fontWeight: 600
+// 定義卡片標題樣式常量
+const CARD_STYLES = {
+  header: {
+    fontSize: '1.5rem',
+    color: '#f58220',
+    marginBottom: '16px',
+    fontWeight: 600
+  }
 };
 
 // 定義標籤樣式常量
@@ -114,7 +117,7 @@ const Skills: React.FC<SkillProps> = ({ id }) => {
           <Col xs={24} md={8} key={index}>
             <StyledCard
               title={category.title}
-              headStyle={CARD_HEAD_STYLE}
+              styles={{ header: CARD_STYLES.header }}
               className="skill-card"
             >
               <div style={SKILLS_CONTAINER_STYLE}>
