@@ -11,6 +11,7 @@
 - **代碼規範**: ESLint
 - **編輯器**: React-Quill
 - **響應式設計**: React-Responsive
+- **容器化**: Docker
 
 ## 快速開始
 
@@ -47,6 +48,16 @@ npm run build
 
 # 預覽生產版本
 npm run preview
+```
+
+### Docker 部署
+
+```bash
+# 構建 Docker 映像
+docker build -t oomaybeoo/my-resume-website .
+
+# 運行容器
+docker run -p 8080:8080 oomaybeoo/my-resume-website
 ```
 
 ## 專案結構
@@ -111,6 +122,7 @@ my-resume-website/
 - 技術能力可視化展示
 - 分類展示各領域專長
 - 技能熟練度評估
+- 星級評分系統直觀呈現技能水平
 
 ### 工作經驗 (Experience)
 - 時間軸式展示
@@ -123,13 +135,33 @@ my-resume-website/
 - 學術成就展示
 
 ### 競賽成就 (Achievement)
-- 重要競賽經歷
-- 獲獎情況展示
-- 專案作品展示
+- 重要競賽經歷列表展示
+- 獲獎情況詳細說明
+- 互動式卡片設計，點擊查看詳情
+- 支持圖片展示功能，直觀呈現競賽成果
+- 提供競賽描述和細節資訊
+- 視覺化圖標提示有圖片的項目
 
 ### 聯絡資訊 (Contact)
 - 聯繫方式展示
 - 社交媒體連結
+
+## 使用指南
+
+### 如何添加新的競賽成就
+
+1. 打開 `src/components/Achievement.tsx` 文件
+2. 找到 `achievements` 陣列
+3. 添加新項目，格式如下：
+```typescript
+{
+  date: '2025年3月',
+  title: '競賽名稱',
+  award: '獎項名稱',
+  imageSrc: '/public/競賽圖片.png', // 圖片路徑，需放在 public 目錄下
+  description: '競賽描述或項目介紹'
+}
+```
 
 ## 開發指南
 
@@ -162,6 +194,12 @@ my-resume-website/
 
 3. 將 `dist` 目錄部署到你的Web服務器
 
+4. 或使用 Docker 進行容器化部署：
+   ```bash
+   docker build -t oomaybeoo/my-resume-website .
+   docker run -p 8080:8080 oomaybeoo/my-resume-website
+   ```
+
 ## 貢獻指南
 
 1. Fork 本專案
@@ -172,6 +210,7 @@ my-resume-website/
 
 ## 版本歷史
 
+- 1.0.0: 添加競賽記錄圖片顯示功能 (2025年4月24日)
 - 0.0.0: 初始版本
 
 ## 授權

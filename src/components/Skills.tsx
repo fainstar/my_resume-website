@@ -62,8 +62,9 @@ const Skills: React.FC<SkillProps> = ({ id }) => {
     {
       title: '前端開發',
       skills: [
-        { name: 'React', level: '專精' },
+        { name: 'React', level: '普通' },
         { name: 'Swift', level: '普通' },
+        { name: 'Flutter', level: '普通' },
       ]
     },
     {

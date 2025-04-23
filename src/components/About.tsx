@@ -18,8 +18,8 @@ const About: React.FC<AboutProps> = ({ id }) => {
     這讓我第一次認識到 伺服器架構與網路技術。直到 高中課堂上接觸IoT，
     我才真正對科技產生濃厚興趣，並開始深入學習 前後端開發。
 
-    在這個過程中，我掌握了 Django 和 Flask 來開發後端，並使用 React 和
-    Swift 開發前端。同時，學習使用 Nginx 來讓我的網站有個名字，並運用
+    在這個過程中，我掌握了 Django 和 Flask 來開發後端，並使用 React ,
+    Swift 和 Flutter 開發前端。同時，學習使用 Nginx 來讓我的網站有個名字，並運用
     AWS 搭建 即時影像串流服務平台。此外，我也運用 Docker 來容器化應
     用，提升開發與部署效率。
 
