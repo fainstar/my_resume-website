@@ -137,6 +137,7 @@ const BlogPost = React.lazy(() => import('./components/BlogPost'));
 - 使用 WebP 格式減少圖片大小
 - 實現圖片懶加載，提升頁面加載速度
 - 使用 srcset 屬性提供不同尺寸的圖片，適應不同設備
+- 利用 UI 元件庫（如 Ant Design 的 Image 元件）提供的圖片處理功能（如預覽、佔位符、錯誤處理）以提升用戶體驗與健壯性。
 
 ### 緩存策略
 
