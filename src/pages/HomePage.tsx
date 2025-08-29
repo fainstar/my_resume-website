@@ -1,6 +1,7 @@
 import React from 'react';
 import { ConfigProvider, Layout } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import About from '../components/About';
 import Skills from '../components/Skills';
@@ -9,6 +10,7 @@ import Education from '../components/Education';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import Achievement from '../components/Achievement';
+import SpecialExperience from '../components/SpecialExperience';
 import ErrorBoundary from '../components/common/ErrorBoundary';
 
 /**
@@ -17,25 +19,21 @@ import ErrorBoundary from '../components/common/ErrorBoundary';
  */
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   
   // 定義網站各區塊
   const sections = [
-    { id: 'about', title: '關於我' },
-    { id: 'skills', title: '專業技能' },
-    { id: 'experience', title: '工作經驗' },
-    { id: 'education', title: '教育背景' },
-    { id: 'achievement', title: '競賽成就' },
-    { id: 'contact', title: '聯絡我' },
-    { id: 'blog', title: '網誌' },
+    { id: 'about', title: t('nav.about') },
+    { id: 'skills', title: t('nav.skills') },
+    { id: 'experience', title: t('nav.experience') },
+    { id: 'education', title: t('nav.education') },
+    { id: 'achievement', title: t('nav.achievement') },
+    { id: 'specialExperience', title: t('nav.specialExperience') },
+    { id: 'contact', title: t('nav.contact') }
   ];
 
-  // 處理區塊點擊事件，滾動到對應區塊或導航到其他頁面
+  // 處理區塊點擊事件，滾動到對應區塊
   const handleSectionClick = (id: string) => {
-    if (id === 'blog') {
-      navigate('/blog');
-      return;
-    }
-    
     const element = document.getElementById(id);
     if (element) {
       const headerOffset = 64; // 頂部導航欄高度
@@ -67,6 +65,7 @@ const HomePage: React.FC = () => {
             <Experience id="experience" />
             <Education id="education" />
             <Achievement id="achievement" />
+            <SpecialExperience id="specialExperience" />
             <Contact id="contact" />
           </Layout.Content>
           

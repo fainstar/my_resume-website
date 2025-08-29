@@ -12,11 +12,10 @@
 6. [Experience 組件](#experience-組件)
 7. [Education 組件](#education-組件)
 8. [Achievement 組件](#achievement-組件)
-9. [Contact 組件](#contact-組件)
-10. [Footer 組件](#footer-組件)
-11. [ProfileInfo 組件](#profileinfo-組件)
-12. [Blog 組件](#blog-組件)
-13. [BlogPost 組件](#blogpost-組件)
+9. [SpecialExperience 組件](#specialexperience-組件)
+10. [Contact 組件](#contact-組件)
+11. [Footer 組件](#footer-組件)
+12. [ProfileInfo 組件](#profileinfo-組件)
 
 ## Section 組件
 
@@ -164,7 +163,45 @@ interface Achievement {
   date: string;   // 獲獎日期
   title: string;  // 競賽名稱
   award: string;  // 獎項
+  imageSrc?: string; // 獎項圖片路徑（可選）
+  description?: string; // 獎項描述（可選）
 }
+```
+
+### 使用示例
+
+```jsx
+<Achievement id="achievements" />
+```
+
+## SpecialExperience 組件
+
+`SpecialExperience.tsx` 展示個人特殊經歷和證書。
+
+### 功能
+
+- 展示證書名稱、發行機構和獲得日期
+- 使用證書圖標（FileProtectOutlined）和動畫效果突出顯示
+- 點擊卡片可查看證書詳細資訊和圖片
+- 使用卡片佈局，懸停時有動畫效果
+- 支持多語言顯示（繁體中文、簡體中文、日文、韓文）
+
+### 數據結構
+
+```typescript
+interface Certificate {
+  date: string;      // 獲得日期
+  title: string;     // 證書名稱
+  issuer: string;    // 發行機構
+  imageSrc?: string; // 證書圖片路徑（可選）
+  description?: string; // 證書描述（可選）
+}
+```
+
+### 使用示例
+
+```tsx
+<SpecialExperience id="specialExperience" />
 ```
 
 ## Contact 組件

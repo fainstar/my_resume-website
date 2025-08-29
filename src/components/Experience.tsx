@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, Card, Row, Col } from 'antd';
+import { useTranslation } from 'react-i18next';
 import Section from './Section';
 import styled from '@emotion/styled';
 import { cardStyles } from '../styles/animations';
@@ -20,36 +21,37 @@ interface ExperienceProps {
 
 const Experience: React.FC<ExperienceProps> = ({ id }) => {
   const { Title, Text } = Typography;
+  const { t } = useTranslation();
   
   const experiences = [
     {
-      company: "鴻勁精密",
-      position: "工讀生",
-      period: "2024年7月 - 2024年9月",
+      company: t('experience.company1'),
+      position: t('experience.position1'),
+      period: t('experience.period1'),
       description: [
-        "協助精密設備如 FT-Handler、CP-Prober 的組裝作業"
+        t('experience.description1')
       ]
     },
     {
-      company: "大智通",
-      position: "工讀生",
-      period: "2023年7月 - 2023年9月",
+      company: t('experience.company2'),
+      position: t('experience.position2'),
+      period: t('experience.period2'),
       description: [
-        "參與物流流程，包括包裹分類、貨物搬運與倉儲整理"
+        t('experience.description2')
       ]
     },
     {
-      company: "全國加油站",
-      position: "工讀生",
-      period: "2022年6月 - 2022年9月",
+      company: t('experience.company3'),
+      position: t('experience.position3'),
+      period: t('experience.period3'),
       description: [
-        "協助加油與收銀，接觸各類顧客、累積現場服務經驗"
+        t('experience.description3')
       ]
     }
   ];
 
   return (
-    <Section id={id} title="工作經驗" backgroundColor="#fff0f6">
+    <Section id={id} title={t('nav.experience')} backgroundColor="#fff0f6">
       <Row gutter={[24, 24]}>
         {experiences.map((exp, index) => (
           <Col xs={24} sm={24} md={8} key={index}>

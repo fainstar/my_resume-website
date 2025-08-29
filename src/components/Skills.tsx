@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Tag, Typography, Row, Col } from 'antd';
+import { useTranslation } from 'react-i18next';
 import Section from './Section';
 import styled from '@emotion/styled';
 import { cardStyles } from '../styles/animations';
@@ -57,10 +58,11 @@ interface SkillProps {
 
 const Skills: React.FC<SkillProps> = ({ id }) => {
   const { Text } = Typography;
+  const { t } = useTranslation();
 
   const skillCategories = [
     {
-      title: '前端開發',
+      title: t('skills.frontend'),
       skills: [
         { name: 'React', level: '★★★☆☆' },
         { name: 'Swift', level: '★★★☆☆' },
@@ -68,14 +70,14 @@ const Skills: React.FC<SkillProps> = ({ id }) => {
       ]
     },
     {
-      title: '後端開發',
+      title: t('skills.backend'),
       skills: [
         { name: 'Django', level: '★★★★★' },
         { name: 'Flask', level: '★★★☆☆' },
       ]
     },
     {
-      title: '基礎設施',
+      title: t('skills.infrastructure'),
       skills: [
         { name: 'Git', level: '★★★★★' },
         { name: 'Nginx', level: '★★★☆☆' },
@@ -84,7 +86,7 @@ const Skills: React.FC<SkillProps> = ({ id }) => {
       ]
     },
     {
-      title: 'IoT硬體平台',
+      title: t('skills.iot_hardware'),
       skills: [
         { name: 'ESP32/ESP8266', level: '★★★★★' },
         { name: 'STM32', level: '★★★☆☆' },
@@ -92,18 +94,18 @@ const Skills: React.FC<SkillProps> = ({ id }) => {
         { name: 'TTGO Display', level: '★★★☆☆' }
       ]
     },
-    {
-      title: 'IoT開發環境',
-      skills: [
-        { name: 'MicroPython', level: '★★★★★' },
-        { name: 'Arduino IDE', level: '★★★★★' },
-        { name: 'Keil IDE', level: '★★★☆☆' }
-      ]
-    }
+    // {
+    //   title: 'IoT開發環境',
+    //   skills: [
+    //     { name: 'MicroPython', level: '★★★★★' },
+    //     { name: 'Arduino IDE', level: '★★★★★' },
+    //     { name: 'Keil IDE', level: '★★★☆☆' }
+    //   ]
+    // }
   ];
 
   return (
-    <Section id={id} title="專業技能" backgroundColor="#fff7e6">
+    <Section id={id} title={t('nav.skills')} backgroundColor="#fff7e6">
       <Row gutter={[24, 24]}>
         {skillCategories.map((category, index) => (
           <Col xs={24} md={8} key={index}>

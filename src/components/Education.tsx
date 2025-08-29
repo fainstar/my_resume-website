@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Row, Col, Typography, Tag, Space } from 'antd';
 import { BookOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import Section from './Section';
 
 interface EducationProps {
@@ -8,13 +9,22 @@ interface EducationProps {
 }
 
 const Education: React.FC<EducationProps> = ({ id }) => {
+  const { t } = useTranslation();
+  
   const educations = [
     {
-      school: '國立高雄科技大學',
-      degree: '資訊工程學系學士',
-      period: '2022年9月 - 2026年6月',
-      description: '專注於網路安全和人工智能的研究，開發創新的AI DDOS防禦系統作為畢業專題。在學期間積極參與各類競賽，展現專業技能與團隊合作能力。',
-      courses: ['演算法', '資料結構', '網路安全', '人工智慧', '機器學習', '資料庫系統'],
+      school: t('education.school'),
+      degree: t('education.degree'),
+      period: t('education.period'),
+      description: t('education.description'),
+      courses: [
+        t('education.course1'),
+        t('education.course2'),
+        t('education.course3'),
+        t('education.course4'),
+        t('education.course5'),
+        t('education.course6')
+      ],
       image: '/university-placeholder.jpg'
     }
   ];
@@ -22,7 +32,7 @@ const Education: React.FC<EducationProps> = ({ id }) => {
   const { Title, Text, Paragraph } = Typography;
 
   return (
-    <Section id={id} title="教育背景" backgroundColor="#e6fffb">
+    <Section id={id} title={t('nav.education')} backgroundColor="#e6fffb">
       <Row gutter={[24, 24]}>
         {educations.map((edu, index) => (
           <Col xs={24} md={12} key={index}>
@@ -83,7 +93,7 @@ const Education: React.FC<EducationProps> = ({ id }) => {
               
               <div>
                 <Text strong style={{ display: 'block', marginBottom: '8px', color: '#1a1a1a' }}>
-                  主修課程：
+                  {t('education.mainCourses')}:
                 </Text>
                 <Space size={[8, 16]} wrap>
                   {edu.courses.map((course, idx) => (

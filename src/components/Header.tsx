@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Typography, Space, Drawer } from 'antd';
-import { MenuOutlined, UserOutlined, TrophyOutlined, BookOutlined, ExperimentOutlined, ContactsOutlined, HomeOutlined, HistoryOutlined } from '@ant-design/icons';
+import { MenuOutlined, UserOutlined, TrophyOutlined, BookOutlined, ExperimentOutlined, ContactsOutlined, HomeOutlined, HistoryOutlined, FileProtectOutlined } from '@ant-design/icons';
 import '../styles/animations.css';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const sectionIcons: { [key: string]: React.ReactNode } = {
   hero: <HomeOutlined />,
@@ -10,8 +11,8 @@ const sectionIcons: { [key: string]: React.ReactNode } = {
   education: <BookOutlined />,
   experience: <HistoryOutlined />,
   achievement: <TrophyOutlined />,
-  contact: <ContactsOutlined />,
-  blog: <BookOutlined />
+  specialExperience: <FileProtectOutlined />,
+  contact: <ContactsOutlined />
 };
 import { useMediaQuery } from 'react-responsive';
 
@@ -77,19 +78,21 @@ const Header: React.FC<HeaderProps> = ({ sections, onSectionClick }) => {
           <Typography.Title level={4} style={{ margin: 0, color: '#1a1a1a', fontWeight: 600 }}>
           </Typography.Title>
           
-          {isMobile ? (
-            <>
-              <Button
-                type="text"
-                icon={<MenuOutlined />}
-                onClick={handleDrawerToggle}
-              />
-              <Drawer
-                placement="right"
-                open={drawerOpen}
-                onClose={handleDrawerToggle}
-                width={250}
-              >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            {isMobile ? (
+              <>
+                <LanguageSwitcher />
+                <Button
+                  type="text"
+                  icon={<MenuOutlined />}
+                  onClick={handleDrawerToggle}
+                />
+                <Drawer
+                  placement="right"
+                  open={drawerOpen}
+                  onClose={handleDrawerToggle}
+                  width={250}
+                >
                 <Menu mode="vertical">
                   {sections.map((section) => (
                     <Menu.Item 
@@ -105,8 +108,9 @@ const Header: React.FC<HeaderProps> = ({ sections, onSectionClick }) => {
               </Drawer>
             </>
           ) : (
-            <Space size="middle" style={{ justifyContent: 'center' }}>
-              {sections.map((section) => (
+            <>
+              <Space size="middle" style={{ justifyContent: 'center' }}>
+                {sections.map((section) => (
                 <Button
                   key={section.id}
                   type="text"
@@ -124,9 +128,12 @@ const Header: React.FC<HeaderProps> = ({ sections, onSectionClick }) => {
                 >
                   {section.title}
                 </Button>
-              ))}
-            </Space>
+                ))}
+              </Space>
+              <LanguageSwitcher />
+            </>
           )}
+          </div>
         </div>
       </div>
     </Layout.Header>
