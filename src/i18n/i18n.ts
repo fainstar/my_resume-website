@@ -13,7 +13,7 @@ i18n
   // 初始化i18next
   .init({
     fallbackLng: 'zh-TW', // 默認語言
-    supportedLngs: ['zh-TW', 'zh-CN', 'ja', 'ko'], // 支持的語言
+    supportedLngs: ['zh-TW', 'zh-CN', 'ja', 'ko', 'en'], // 支持的語言
     debug: process.env.NODE_ENV === 'development',
     
     interpolation: {

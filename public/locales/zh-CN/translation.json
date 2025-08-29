@@ -108,8 +108,28 @@
     "title": "联系我",
     "name": "姓名",
     "email": "电子邮件",
+    "phone": "联系电话",
     "message": "信息",
-    "send": "发送"
+    "send": "发送",
+    "subject": "主题",
+    "sending": "发送中",
+    "sendingMessage": "正在发送您的信息，请稍候...",
+    "pleaseWait": "请稍候",
+    "sendSuccess": "发送成功",
+    "successMessage": "您的信息已成功发送！我们会尽快回复您。",
+    "confirm": "确定",
+    "sendFailed": "发送失败",
+    "failedMessage": "很抱歉，发送失败。请稍后再试！",
+    "close": "关闭",
+    "nameRequired": "请输入您的姓名",
+    "namePlaceholder": "请输入您的姓名",
+    "emailRequired": "请输入您的电子邮件",
+    "emailInvalid": "请输入有效的电子邮件地址",
+    "emailPlaceholder": "请输入您的电子邮件",
+    "subjectRequired": "请输入主题",
+    "subjectPlaceholder": "请输入主题",
+    "messageRequired": "请输入信息内容",
+    "messagePlaceholder": "请输入您想传达的信息"
   },
   "blog": {
     "title": "博客",
@@ -119,7 +139,8 @@
     "zh-TW": "繁体中文",
     "zh-CN": "简体中文",
     "ja": "日文",
-    "ko": "韩文"
+    "ko": "韩文",
+    "en": "英文"
   },
   "specialExperience": {
     "title": "特殊经历",
@@ -129,14 +150,17 @@
     "date1": "2024年6月",
     "title1": "劳动部证书",
     "issuer1": "劳动部",
-    "description1": "取得劳动部核发的专业技能证书，证明具备相关领域的专业能力。",
-    "date2": "2024年5月",
+    "description1": "获得劳动部颁发的专业技能证书，证明具备相关领域的专业能力。",
+    "date2": "2025年6月",
     "title2": "微软AI-900证书",
     "issuer2": "微软",
-    "description2": "取得微软AI-900人工智能基础认证，证明具备AI基础知识与应用能力。",
+    "description2": "获得微软AI-900人工智能基础认证，证明具备AI基础知识与应用能力。",
     "date3": "2025年7月",
     "title3": "日本实习证明",
-    "issuer3": "福岡工業大学",
-    "description3": "参与教育部学海筑梦计划，获得学习海啸侦测经验与跨文化沟通能力。"
+    "issuer3": "福冈工业大学",
+    "description3": "参与教育部学海筑梦计划，获得学习海啸检测经验与跨文化沟通能力。"
+  },
+  "footer": {
+    "copyright": "©CAI，部署于台中。"
   }
 }

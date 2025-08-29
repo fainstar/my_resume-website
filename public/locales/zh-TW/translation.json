@@ -106,10 +106,30 @@
   },
   "contact": {
     "title": "聯絡我",
-    "name": "姓名",
+    "name": "稱呼",
     "email": "電子郵件",
+    "phone": "聯絡電話",
     "message": "訊息",
-    "send": "發送"
+    "send": "發送",
+    "subject": "主旨",
+    "sending": "傳送中",
+    "sendingMessage": "正在傳送您的訊息，請稍候...",
+    "pleaseWait": "請稍候",
+    "sendSuccess": "傳送成功",
+    "successMessage": "您的訊息已成功傳送！我們會盡快回覆您。",
+    "confirm": "確定",
+    "sendFailed": "傳送失敗",
+    "failedMessage": "很抱歉，傳送失敗。請稍後再試！",
+    "close": "關閉",
+    "nameRequired": "請輸入您的稱呼",
+    "namePlaceholder": "請輸入您的稱呼",
+    "emailRequired": "請輸入您的電子郵件",
+    "emailInvalid": "請輸入有效的電子郵件地址",
+    "emailPlaceholder": "請輸入您的電子郵件",
+    "subjectRequired": "請輸入主旨",
+    "subjectPlaceholder": "請輸入主旨",
+    "messageRequired": "請輸入訊息內容",
+    "messagePlaceholder": "請輸入您想傳達的訊息"
   },
   "blog": {
     "title": "網誌",
@@ -119,7 +139,8 @@
     "zh-TW": "繁體中文",
     "zh-CN": "簡體中文",
     "ja": "日文",
-    "ko": "韓文"
+    "ko": "韓文",
+    "en": "英文"
   },
   "specialExperience": {
     "title": "特殊經歷",
@@ -138,5 +159,8 @@
     "title3": "日本實習證明",
     "issuer3": "福岡工業大学",
     "description3": "參與教育部學海築夢計畫，獲得學習海嘯偵測經驗與跨文化溝通能力。"
+  },
+  "footer": {
+    "copyright": "©CAI，部署於台中。"
   }
 }

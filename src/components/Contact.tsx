@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Modal, Row, Col, Card, Typography, Space } from 'antd';
 import { MailOutlined, PhoneOutlined, SendOutlined, CheckCircleOutlined, CloseCircleOutlined, GithubOutlined, InstagramOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import Section from './Section';
 
 interface ContactProps {
@@ -17,6 +18,7 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
   
   const [form] = Form.useForm<FormValues>();
   const { Text } = Typography;
+  const { t } = useTranslation();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalConfig, setModalConfig] = useState<{
@@ -41,10 +43,10 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
     try {
       // 顯示提交中的狀態
       setModalConfig({
-        title: '傳送中',
-        content: '正在傳送您的訊息，請稍候...',
+        title: t('contact.sending', '傳送中'),
+        content: t('contact.sendingMessage', '正在傳送您的訊息，請稍候...'),
         icon: <SendOutlined style={{ color: '#1890ff', fontSize: '24px' }} />,
-        okText: '請稍候'
+        okText: t('contact.pleaseWait', '請稍候')
       });
       setIsModalVisible(true);
       
@@ -58,19 +60,19 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
       // 由於no-cors模式，我們無法獲取具體的響應狀態
       // 但如果沒有拋出錯誤，就認為提交成功
       setModalConfig({
-        title: '傳送成功',
-        content: '您的訊息已成功傳送！我們會盡快回覆您。',
+        title: t('contact.sendSuccess', '傳送成功'),
+        content: t('contact.successMessage', '您的訊息已成功傳送！我們會盡快回覆您。'),
         icon: <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '24px' }} />,
-        okText: '確定'
+        okText: t('contact.confirm', '確定')
       });
       form.resetFields();
     } catch (error) {
       console.error('提交表單時發生錯誤:', error);
       setModalConfig({
-        title: '傳送失敗',
-        content: '很抱歉，傳送失敗。請稍後再試！',
+        title: t('contact.sendFailed', '傳送失敗'),
+        content: t('contact.failedMessage', '很抱歉，傳送失敗。請稍後再試！'),
         icon: <CloseCircleOutlined style={{ color: '#ff4d4f', fontSize: '24px' }} />,
-        okText: '關閉'
+        okText: t('contact.close', '關閉')
       });
     }
   };
@@ -79,12 +81,12 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
   const contactInfo = [
     {
       icon: <MailOutlined style={{ fontSize: '24px', color: '#1890ff' }} />,
-      title: '電子郵件',
+      title: t('contact.email'),
       content: <a href="mailto:xomaybeox@gmail.com" style={{ color: '#1890ff', textDecoration: 'none', fontWeight: 500 }}>xomaybeox@gmail.com</a>
     },
     {
       icon: <PhoneOutlined style={{ fontSize: '24px', color: '#52c41a' }} />,
-      title: '聯絡電話',
+      title: t('contact.phone', '聯絡電話'),
       content: <a href="tel:0909262309" style={{ color: '#52c41a', textDecoration: 'none', fontWeight: 500 }}>0909262309</a>
     },
     {
@@ -104,7 +106,7 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
   };
 
   return (
-    <Section id={id} title="聯絡我" backgroundColor="#f0f5ff">
+    <Section id={id} title={t('nav.contact')} backgroundColor="#f0f5ff">
       <Modal
         title={modalConfig.title}
         open={isModalVisible}
@@ -169,43 +171,43 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
                 <Col xs={24} sm={12}>
                   <Form.Item
                     name="name"
-                    label="稱呼"
-                    rules={[{ required: true, message: '請輸入您的稱呼' }]}
+                    label={t('contact.name')}
+                    rules={[{ required: true, message: t('contact.nameRequired', '請輸入您的稱呼') }]}
                   >
-                    <Input size="large" placeholder="請輸入您的稱呼" />
+                    <Input size="large" placeholder={t('contact.namePlaceholder', '請輸入您的稱呼')} />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12}>
                   <Form.Item
                     name="email"
-                    label="電子郵件"
+                    label={t('contact.email')}
                     rules={[
-                      { required: true, message: '請輸入您的電子郵件' },
-                      { type: 'email', message: '請輸入有效的電子郵件地址' }
+                      { required: true, message: t('contact.emailRequired', '請輸入您的電子郵件') },
+                      { type: 'email', message: t('contact.emailInvalid', '請輸入有效的電子郵件地址') }
                     ]}
                   >
-                    <Input size="large" placeholder="請輸入您的電子郵件" />
+                    <Input size="large" placeholder={t('contact.emailPlaceholder', '請輸入您的電子郵件')} />
                   </Form.Item>
                 </Col>
               </Row>
 
               <Form.Item
                 name="subject"
-                label="主旨"
-                rules={[{ required: true, message: '請輸入主旨' }]}
+                label={t('contact.subject', '主旨')}
+                rules={[{ required: true, message: t('contact.subjectRequired', '請輸入主旨') }]}
               >
-                <Input size="large" placeholder="請輸入主旨" />
+                <Input size="large" placeholder={t('contact.subjectPlaceholder', '請輸入主旨')} />
               </Form.Item>
 
               <Form.Item
                 name="message"
-                label="訊息內容"
-                rules={[{ required: true, message: '請輸入訊息內容' }]}
+                label={t('contact.message')}
+                rules={[{ required: true, message: t('contact.messageRequired', '請輸入訊息內容') }]}
               >
                 <Input.TextArea
                   size="large"
                   rows={4}
-                  placeholder="請輸入您想傳達的訊息"
+                  placeholder={t('contact.messagePlaceholder', '請輸入您想傳達的訊息')}
                 />
               </Form.Item>
 
@@ -223,7 +225,7 @@ const Contact: React.FC<ContactProps> = ({ id }) => {
                     padding: '0 32px'
                   }}
                 >
-                  送出訊息
+                  {t('contact.send')}
                 </Button>
               </Form.Item>
             </Form>

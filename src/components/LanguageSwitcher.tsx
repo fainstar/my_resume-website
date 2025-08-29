@@ -7,7 +7,7 @@ const { Option } = Select; // 從Select中解構Option組件
 
 /**
  * 語言切換組件
- * 允許用戶在繁體中文、簡體中文、日文和韓文之間切換
+ * 允許用戶在繁體中文、簡體中文、日文、韓文和英文之間切換
  * 使用Ant Design的Select組件實現下拉選單
  * 使用i18next進行多語言支持
  * 將選擇的語言保存在localStorage中以便持久化
@@ -18,7 +18,7 @@ const LanguageSwitcher: React.FC = () => {
 
   /**
    * 處理語言變更的函數
-   * @param value - 選擇的語言代碼 (zh-TW, zh-CN, ja, ko)
+   * @param value - 選擇的語言代碼 (zh-TW, zh-CN, ja, ko, en)
    */
   const handleLanguageChange = (value: string) => {
     i18n.changeLanguage(value); // 變更應用程式的當前語言
@@ -41,6 +41,7 @@ const LanguageSwitcher: React.FC = () => {
         <Option value="zh-CN">{t('language.zh-CN')}</Option> {/* 簡體中文選項 */}
         <Option value="ja">{t('language.ja')}</Option> {/* 日文選項 */}
         <Option value="ko">{t('language.ko')}</Option> {/* 韓文選項 */}
+        <Option value="en">{t('language.en')}</Option> {/* 英文選項 */}
       </Select>
     </div>
   );

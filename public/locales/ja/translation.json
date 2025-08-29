@@ -108,8 +108,28 @@
     "title": "お問い合わせ",
     "name": "お名前",
     "email": "メールアドレス",
+    "phone": "電話番号",
     "message": "メッセージ",
-    "send": "送信"
+    "send": "送信",
+    "subject": "件名",
+    "sending": "送信中",
+    "sendingMessage": "メッセージを送信中です。しばらくお待ちください...",
+    "pleaseWait": "お待ちください",
+    "sendSuccess": "送信完了",
+    "successMessage": "メッセージが正常に送信されました！できるだけ早くご返信いたします。",
+    "confirm": "確認",
+    "sendFailed": "送信失敗",
+    "failedMessage": "申し訳ありませんが、送信に失敗しました。後ほど再試行してください！",
+    "close": "閉じる",
+    "nameRequired": "お名前を入力してください",
+    "namePlaceholder": "お名前を入力してください",
+    "emailRequired": "メールアドレスを入力してください",
+    "emailInvalid": "有効なメールアドレスを入力してください",
+    "emailPlaceholder": "メールアドレスを入力してください",
+    "subjectRequired": "件名を入力してください",
+    "subjectPlaceholder": "件名を入力してください",
+    "messageRequired": "メッセージを入力してください",
+    "messagePlaceholder": "伝えたいメッセージを入力してください"
   },
   "blog": {
     "title": "ブログ",
@@ -119,7 +139,8 @@
     "zh-TW": "繁体中国語",
     "zh-CN": "簡体中国語",
     "ja": "日本語",
-    "ko": "韓国語"
+    "ko": "韓国語",
+    "en": "英語"
   },
   "specialExperience": {
     "title": "特別な経験",
@@ -127,16 +148,19 @@
     "dateLabel": "日付",
     "noImage": "画像はありません",
     "date1": "2024年6月",
-    "title1": "労働部証明書",
-    "issuer1": "労働部",
-    "description1": "労働部が発行する専門技能証明書を取得し、関連分野の専門能力を証明しています。",
+    "title1": "労働省証明書",
+    "issuer1": "労働省",
+    "description1": "労働省発行の専門技術証明書を取得し、関連分野での専門能力を証明。",
     "date2": "2024年5月",
     "title2": "マイクロソフトAI-900証明書",
     "issuer2": "マイクロソフト",
-    "description2": "マイクロソフトAI-900人工知能基礎認証を取得し、AI基礎知識と応用能力を証明しています。",
+    "description2": "マイクロソフトAI-900人工知能基礎認定を取得し、AI基礎知識と応用能力を証明。",
     "date3": "2025年7月",
-    "title3": "日本インターンシップ証明",
+    "title3": "日本インターンシップ証明書",
     "issuer3": "福岡工業大学",
-    "description3": "教育部学海築夢プログラムに参加し、津波検出の経験と異文化コミュニケーション能力を獲得しました。"
+    "description3": "教育省の海外留学プログラムに参加し、津波検出の経験と多文化コミュニケーションスキルを獲得。"
+  },
+  "footer": {
+    "copyright": "©CAI、台中に配置。"
   }
 }
