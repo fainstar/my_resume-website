@@ -1,6 +1,6 @@
 import React, { useState } from 'react'; // 引入React核心和useState鉤子
 import { Card, Typography, Row, Col, Modal, Image } from 'antd'; // 引入Ant Design組件
-import { TrophyOutlined, PictureOutlined, FileProtectOutlined } from '@ant-design/icons'; // 引入圖標組件
+import { PictureOutlined, FileProtectOutlined } from '@ant-design/icons'; // 引入圖標組件
 import { useTranslation } from 'react-i18next'; // 引入i18n翻譯功能
 import Section from './Section'; // 引入自定義Section組件
 import styled from '@emotion/styled'; // 引入emotion樣式庫

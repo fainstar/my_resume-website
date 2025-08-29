@@ -75,6 +75,7 @@ const StyledButton = styled.button`
 - **部落格功能**：整合 ReactQuill 富文本編輯器，支援文章的創建、編輯與刪除
 - **社交媒體整合**：在 Contact 與 Footer 組件中整合 GitHub、Instagram 等社交媒體連結
 - **表單整合**：支援將聯絡表單提交到 Google 表單，實現無後端的資料收集
+- **多語言聯絡表單**：聯絡表單完全支援多語言，包括表單標籤、提示文字、驗證訊息和狀態提示
 
 ---
 
@@ -383,6 +384,165 @@ jobs:
 
 ---
 
+## 🌐 多語言支持實現
+
+本網站已實現完整的多語言支持功能，使用 i18next 框架提供繁體中文、簡體中文、日文、韓文和英文五種語言的切換能力。
+
+### 多語言技術架構
+
+| 技術/套件 | 用途 |
+|-----------|------|
+| **i18next** | 核心國際化框架 |
+| **react-i18next** | React 綁定，提供 hooks 和組件 |
+| **i18next-browser-languagedetector** | 自動檢測用戶瀏覽器語言 |
+| **i18next-http-backend** | 從伺服器加載翻譯文件 |
+
+### 翻譯文件結構
+
+翻譯文件採用 JSON 格式，按語言分類存儲在 `/public/locales/` 目錄下：
+
+```
+/public/locales/
+  ├── zh-TW/       # 繁體中文
+  │   └── translation.json
+  ├── zh-CN/       # 簡體中文
+  │   └── translation.json
+  ├── ja/          # 日文
+  │   └── translation.json
+  ├── ko/          # 韓文
+  │   └── translation.json
+  └── en/          # 英文
+      └── translation.json
+```
+
+### i18next 配置實現
+
+```typescript
+// src/i18n/i18n.ts
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from 'i18next-http-backend';
+
+i18n
+  .use(Backend)                // 使用http後端加載翻譯文件
+  .use(LanguageDetector)       // 檢測用戶語言
+  .use(initReactI18next)       // 將i18n實例傳遞給react-i18next
+  .init({
+    fallbackLng: 'zh-TW',     // 默認語言
+    supportedLngs: ['zh-TW', 'zh-CN', 'ja', 'ko', 'en'], // 支持的語言
+    debug: process.env.NODE_ENV === 'development',
+    
+    interpolation: {
+      escapeValue: false,      // 不需要為React轉義
+    },
+    
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+    },
+    
+    backend: {
+      loadPath: '/locales/{{lng}}/{{ns}}.json', // 翻譯文件路徑
+    },
+  });
+
+export default i18n;
+```
+
+### 語言切換組件
+
+網站頂部導航欄中的語言切換器允許用戶在五種語言間切換：
+
+```tsx
+// src/components/LanguageSwitcher.tsx
+const LanguageSwitcher: React.FC = () => {
+  const { i18n, t } = useTranslation();
+
+  const handleLanguageChange = (value: string) => {
+    i18n.changeLanguage(value);
+    localStorage.setItem('i18nextLng', value);
+  };
+
+  return (
+    <div className="language-switcher">
+      <Select
+        defaultValue={i18n.language}
+        onChange={handleLanguageChange}
+        suffixIcon={<GlobalOutlined />}
+      >
+        <Option value="zh-TW">{t('language.zh-TW')}</Option>
+        <Option value="zh-CN">{t('language.zh-CN')}</Option>
+        <Option value="ja">{t('language.ja')}</Option>
+        <Option value="ko">{t('language.ko')}</Option>
+        <Option value="en">{t('language.en')}</Option>
+      </Select>
+    </div>
+  );
+};
+```
+
+### 翻譯鍵結構
+
+翻譯文件採用嵌套結構，按功能模塊組織：
+
+```json
+{
+  "header": {
+    "home": "首頁",
+    "about": "關於我"
+  },
+  "contact": {
+    "title": "聯絡我",
+    "name": "稱呼",
+    "email": "電子郵件"
+  }
+}
+```
+
+### 在組件中使用翻譯
+
+```tsx
+// 在任何組件中使用翻譯
+import { useTranslation } from 'react-i18next';
+
+const MyComponent = () => {
+  const { t } = useTranslation();
+  
+  return (
+    <div>
+      <h1>{t('contact.title')}</h1>
+      <p>{t('contact.message')}</p>
+    </div>
+  );
+};
+```
+
+### 頁腳版權聲明多語言支持
+
+頁腳的版權聲明也已實現多語言支持：
+
+```tsx
+// src/components/Footer.tsx
+const Footer: React.FC = () => {
+  const { t } = useTranslation();
+  
+  return (
+    <footer>
+      <div className="copyright">
+        {t('footer.copyright')} {/* 使用翻譯鍵獲取對應語言的版權聲明 */}
+      </div>
+    </footer>
+  );
+};
+```
+
+### 語言持久化
+
+用戶選擇的語言會保存在 localStorage 中，確保頁面刷新後保持相同的語言設置。系統也會自動檢測用戶瀏覽器語言，提供最佳的初始語言體驗。
+
+---
+
 ## 🔮 未來擴展計劃
 
 ### 技術升級路線圖
@@ -395,7 +555,6 @@ jobs:
 
 ### 功能擴展計劃
 
-- **多語言支持**：使用 i18next 實現中英文切換
 - **主題定制**：允許用戶選擇深色/淺色模式
 - **互動式項目展示**：添加 3D 模型和動畫效果
 - **評論系統**：整合第三方評論服務如 Disqus

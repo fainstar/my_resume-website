@@ -1,6 +1,6 @@
 import React from 'react';
 import { ConfigProvider, Layout } from 'antd';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import About from '../components/About';
@@ -18,7 +18,6 @@ import ErrorBoundary from '../components/common/ErrorBoundary';
  * 包含個人履歷的主要內容區塊
  */
 const HomePage: React.FC = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   
   // 定義網站各區塊

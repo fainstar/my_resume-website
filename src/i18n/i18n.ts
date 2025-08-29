@@ -14,7 +14,7 @@ i18n
   .init({
     fallbackLng: 'zh-TW', // 默認語言
     supportedLngs: ['zh-TW', 'zh-CN', 'ja', 'ko', 'en'], // 支持的語言
-    debug: process.env.NODE_ENV === 'development',
+    debug: import.meta.env.DEV, // 使用 Vite 的環境變量
     
     interpolation: {
       escapeValue: false, // 不需要為React轉義
